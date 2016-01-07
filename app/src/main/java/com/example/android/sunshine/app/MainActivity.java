@@ -62,15 +62,9 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            String[] forecastArray = {
-                    "Today - Sunny - 88/63",
-                    "Tomorrow - Foggy - 70/46",
-                    "Weds - Cloudy - 72/33",
-                    "Thurs - Rainy 64/51",
-                    "Fri - Foggy 70/46",
-                    "Sat - Sunny 76/68",
-            };
-            List<String> weekForecast = new ArrayList<>(Arrays.asList(forecastArray));
+            List<String> weekForecast =
+                    new ArrayList<>(Arrays.asList(DummyForecastData.forecastArray));
+            // ArrayAdapter takes data from source: ArrayList
             ArrayAdapter<String> weekForecastAdapter = new ArrayAdapter<String>(
                     getActivity(),
                     R.layout.list_item_forecast,
