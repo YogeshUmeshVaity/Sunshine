@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,13 +65,20 @@ public class MainActivity extends ActionBarActivity {
 
             List<String> weekForecast =
                     new ArrayList<>(Arrays.asList(DummyForecastData.forecastArray));
+
             // ArrayAdapter takes data from source: ArrayList
             ArrayAdapter<String> weekForecastAdapter = new ArrayAdapter<String>(
                     getActivity(),
                     R.layout.list_item_forecast,
                     R.id.list_item_forecast_textview,
                     weekForecast);
+
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            ListView weekForecastList = (ListView) rootView.findViewById(R.id.listview_forecast);
+            // Associate the ArrayAdapter with the ListView
+            weekForecastList.setAdapter(weekForecastAdapter);
+
             return rootView;
         }
     }
