@@ -35,7 +35,8 @@ import java.util.List;
  */
 public class ForecastFragment extends Fragment {
 
-    ArrayAdapter<String> weekForecastAdapter;
+    private ArrayAdapter<String> weekForecastAdapter;
+    private ListView weekForecastList;
 
     public ForecastFragment() {
     }
@@ -58,7 +59,7 @@ public class ForecastFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ListView weekForecastList = (ListView) rootView.findViewById(R.id.listview_forecast);
+        weekForecastList = (ListView) rootView.findViewById(R.id.listview_forecast);
         // Associate the ArrayAdapter with the ListView
         weekForecastList.setAdapter(weekForecastAdapter);
 
@@ -205,9 +206,27 @@ public class ForecastFragment extends Fragment {
             return null;
         }
 
-        /* The date/time conversion code is going to be moved outside the asynctask later,
-         * so for convenience we're breaking it out into its own method now.
+        /**
+         * <p>Runs on the UI thread after {@link #doInBackground}. The
+         * specified result is the value returned by {@link #doInBackground}.</p>
+         * <p/>
+         * <p>This method won't be invoked if the task was cancelled.</p>
+         *
+         * @param result The result of the operation computed by {@link #doInBackground}.
          */
+        @Override
+        protected void onPostExecute(String[] result) {
+            if(result != null) {
+                weekForecastAdapter.clear();
+                for(String dayForecast : result) {
+                    weekForecastAdapter.add(dayForecast);
+                }
+            }
+        }
+
+        /* The date/time conversion code is going to be moved outside the asynctask later,
+                 * so for convenience we're breaking it out into its own method now.
+                 */
         private String getReadableDateString(long time) {
             // Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.
@@ -296,12 +315,7 @@ public class ForecastFragment extends Fragment {
                 highAndLow = formatHighLows(high, low);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
-
-            for (String s : resultStrs) {
-                Log.v(LOG_TAG, "Forecast entry: " + s);
-            }
             return resultStrs;
-
         }
 
     }
