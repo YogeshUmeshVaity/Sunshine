@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,10 +78,12 @@ public class DetailActivity extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
             Intent detailIntent = getActivity().getIntent();
-            String forecastDetails = detailIntent.getStringExtra(Intent.EXTRA_TEXT);
-            Log.d("DetailActivity", forecastDetails);
-            TextView detailTextView = (TextView) rootView.findViewById(R.id.detail_text_view);
-            detailTextView.setText(forecastDetails);
+            if(detailIntent != null && detailIntent.hasExtra(Intent.EXTRA_TEXT)) {
+                String forecastDetails = detailIntent.getStringExtra(Intent.EXTRA_TEXT);
+                TextView detailTextView = (TextView) rootView.findViewById(R.id.detail_text_view);
+                detailTextView.setText(forecastDetails);
+            }
+
             return rootView;
         }
     }
