@@ -11,4 +11,7 @@
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="title_activity_detail">DetailActivity</string>
 
+    <!-- Settings activity title [CHAR SIZE 21] -->
+    <string name="title_activity_settings">Settings</string>
+
 </resources>
