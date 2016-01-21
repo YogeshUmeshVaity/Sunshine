@@ -14,4 +14,11 @@
     <!-- Settings activity title [CHAR SIZE 21] -->
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Location preference title in settings activity -->
+    <string name="pref_location_label">Location</string>
+    <!-- Key for Location preference in settings activity -->
+    <string name="pref_location_key" translatable="false">location</string>
+    <!-- Default value for location in SettingsActivity -->
+    <string name="pref_location_default" translatable="false">94043</string>
+
 </resources>
