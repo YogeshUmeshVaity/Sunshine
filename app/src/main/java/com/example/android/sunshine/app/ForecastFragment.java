@@ -51,15 +51,12 @@ public class ForecastFragment extends Fragment {
         // Must set this to true here to have the options menu of fragment appear.
         setHasOptionsMenu(true);
 
-        List<String> weekForecast =
-                new ArrayList<>(Arrays.asList(DummyForecastData.forecastArray));
-
         // ArrayAdapter takes data from source: ArrayList
         weekForecastAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast);
+                new ArrayList<String>());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -90,6 +87,28 @@ public class ForecastFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    /**
+     * Called when the Fragment is visible to the user.  This is generally
+     * tied to {@link Activity#onStart() Activity.onStart} of the containing
+     * Activity's lifecycle.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
+    private void updateWeather() {
+        // Get settings for location(postal code)
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(getContext());
+        // location is the postal code
+        String location = sharedPreferences.getString(
+                getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default));
+        new FetchWeatherTask().execute(location);
     }
 
     /**
@@ -125,13 +144,7 @@ public class ForecastFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             // Get settings for location(postal code)
-            SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(getContext());
-            // location is the postal code
-            String location = sharedPreferences.getString(
-                    getString(R.string.pref_location_key),
-                    getString(R.string.pref_location_default));
-            new FetchWeatherTask().execute(location);
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
