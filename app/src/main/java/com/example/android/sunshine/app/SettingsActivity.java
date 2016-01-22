@@ -43,6 +43,13 @@ public class SettingsActivity extends PreferenceActivity
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
+        /* Above code is simplified below for better readability.
+        // To retrieve the string value of the preference...
+        Context context = preference.getContext();
+        SharePreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = preference.getKey();
+        String value = sharedPrefs.getString(key, "");
+         */
     }
 
     @Override
