@@ -21,4 +21,12 @@
     <!-- Default value for location in SettingsActivity -->
     <string name="pref_location_default" translatable="false">94043</string>
 
+    <!-- ListPreference strings in SettingsActivity -->
+    <string name="pref_temperature_units_label">Temperature Units</string>
+    <string name="pref_temperature_units_key">temperature_units</string>
+    <string name="pref_temperature_default">Metric</string>
+    <!-- Entries and entry values for ListPreference -->
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
+
 </resources>

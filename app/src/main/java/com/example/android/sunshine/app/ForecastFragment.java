@@ -283,15 +283,32 @@ public class ForecastFragment extends Fragment {
         }
 
         /**
-         * Prepare the weather high/lows for presentation.
+         * Prepares the weather high/lows for presentation.
+         * Converts to imperial if the temperature unit in settings is imperial
          */
         private String formatHighLows(double high, double low) {
             // For presentation, assume the user doesn't care about tenths of a degree.
+            // Here the temperatures are in metric i.e. celsius.
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
+            // Get preference value from temperature unit setting
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(getContext());
+            String temperatureUnit =
+                    sharedPreferences.getString(getString(R.string.pref_temperature_units_key), "0");
+            // Convert temperatures according to settings
+            // 1 = Imperial(Fahrenheit)
+            if(temperatureUnit.equals("1")) {
+                roundedHigh = convertCelsiusToFahrenheit(roundedHigh);
+                roundedLow = convertCelsiusToFahrenheit(roundedLow);
+            }
 
             String highLowStr = roundedHigh + "/" + roundedLow;
             return highLowStr;
+        }
+
+        private long convertCelsiusToFahrenheit(long celsius) {
+            return (long)((9.0 / 5.0) * celsius + 32);
         }
 
         /**

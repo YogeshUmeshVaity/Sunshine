@@ -11,4 +11,12 @@
         android:inputType="text"
         android:singleLine="true"/>
 
+    <!-- TODO : provide default from array -->
+    <ListPreference
+        android:title="@string/pref_temperature_units_label"
+        android:key="@string/pref_temperature_units_key"
+        android:defaultValue="0"
+        android:entries="@array/pref_temperature_units_entries_array"
+        android:entryValues="@array/pref_temperature_units_values_array"/>
+
 </PreferenceScreen>
