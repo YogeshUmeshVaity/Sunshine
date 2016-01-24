@@ -33,4 +33,7 @@
     <string name="pref_temperature_units_metric_value" translatable="false">metric</string>
     <string name="pref_temperature_units_imperial_value" translatable="false">imperial</string>
 
+
+    <string name="action_show_location">Location Map</string>
+
 </resources>
