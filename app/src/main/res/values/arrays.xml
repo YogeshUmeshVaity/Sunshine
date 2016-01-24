@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="pref_temperature_units_entries_array">
-        <item>@string/metric</item>
-        <item>@string/imperial</item>
+        <item>@string/pref_temperature_units_metric_entry</item>
+        <item>@string/pref_temperature_units_imperial_entry</item>
     </string-array>
 
     <string-array name="pref_temperature_units_values_array">
-        <item>0</item>
-        <item>1</item>
+        <item>@string/pref_temperature_units_metric_value</item>
+        <item>@string/pref_temperature_units_imperial_value</item>
     </string-array>
 </resources>

@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- App name [CHAR LIMIT=12] -->
     <string name="app_name">Sunshine</string>
-    <string name="hello_world">Hello world!</string>
+    <!-- Settings menu [CHAR LIMIT=21] -->
     <string name="action_settings">Settings</string>
 
-    <!-- Refresh menu [CHAR SIZE 12] -->
+    <!-- Refresh menu [CHAR LIMIT=12] -->
     <!-- If it's a proper name or for debugging purposes, use translatable="false"
     for strings that you don't want translated to save translation costs -->
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="title_activity_detail">DetailActivity</string>
 
-    <!-- Settings activity title [CHAR SIZE 21] -->
+    <!-- Settings activity title [CHAR LIMIT=21] -->
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Location preference title in settings activity -->
+    <!-- Location preference title in settings activity [CHAR LIMIT=25] -->
     <string name="pref_location_label">Location</string>
     <!-- Key for Location preference in settings activity -->
     <string name="pref_location_key" translatable="false">location</string>
     <!-- Default value for location in SettingsActivity -->
     <string name="pref_location_default" translatable="false">94043</string>
 
-    <!-- ListPreference strings in SettingsActivity -->
+    <!-- ListPreference strings in SettingsActivity [CHAR LIMIT=25]-->
     <string name="pref_temperature_units_label">Temperature Units</string>
     <string name="pref_temperature_units_key">temperature_units</string>
-    <string name="pref_temperature_default">Metric</string>
-    <!-- Entries and entry values for ListPreference -->
-    <string name="metric">Metric</string>
-    <string name="imperial">Imperial</string>
+
+    <!-- Entries for ListPreference [CHAR LIMIT=25]-->
+    <string name="pref_temperature_units_metric_entry">Metric</string>
+    <string name="pref_temperature_units_imperial_entry">Imperial</string>
+
+    <!-- Entry values for ListPreference -->
+    <string name="pref_temperature_units_metric_value" translatable="false">metric</string>
+    <string name="pref_temperature_units_imperial_value" translatable="false">imperial</string>
 
 </resources>

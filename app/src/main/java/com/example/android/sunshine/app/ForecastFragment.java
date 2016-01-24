@@ -264,9 +264,9 @@ public class ForecastFragment extends Fragment {
          */
         @Override
         protected void onPostExecute(String[] result) {
-            if(result != null) {
+            if (result != null) {
                 weekForecastAdapter.clear();
-                for(String dayForecast : result) {
+                for (String dayForecast : result) {
                     weekForecastAdapter.add(dayForecast);
                 }
             }
@@ -294,11 +294,12 @@ public class ForecastFragment extends Fragment {
             // Get preference value from temperature unit setting
             SharedPreferences sharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(getContext());
-            String temperatureUnit =
-                    sharedPreferences.getString(getString(R.string.pref_temperature_units_key), "0");
+            String temperatureUnit = sharedPreferences.getString(
+                    getString(R.string.pref_temperature_units_key),
+                    getString(R.string.pref_temperature_units_metric_value));
             // Convert temperatures according to settings
             // 1 = Imperial(Fahrenheit)
-            if(temperatureUnit.equals("1")) {
+            if (temperatureUnit.equals(getString(R.string.pref_temperature_units_imperial_value))) {
                 roundedHigh = convertCelsiusToFahrenheit(roundedHigh);
                 roundedLow = convertCelsiusToFahrenheit(roundedLow);
             }
@@ -308,7 +309,7 @@ public class ForecastFragment extends Fragment {
         }
 
         private long convertCelsiusToFahrenheit(long celsius) {
-            return (long)((9.0 / 5.0) * celsius + 32);
+            return (long) ((9.0 / 5.0) * celsius + 32);
         }
 
         /**
