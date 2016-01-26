@@ -32,8 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -147,7 +145,34 @@ public class ForecastFragment extends Fragment {
             updateWeather();
             return true;
         }
+        if(id == R.id.action_show_location) {
+            showLocationMap();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Sends an intent to open the location on google maps
+     * TODO:include the code to check if the google maps is installed, otherwise the the app crashes.
+     */
+    private void showLocationMap() {
+        // Get preference value for location(postal code).
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String postalCode = settings.getString(getString(R.string.pref_location_key), "");
+
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                .appendQueryParameter("q", postalCode)
+                .build();
+
+        Intent sendLocationToMap = new Intent(Intent.ACTION_VIEW);
+        sendLocationToMap.setData(geoLocation);
+        if (sendLocationToMap.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(sendLocationToMap);
+        } else {
+            // Notify user that Google maps is not installed
+            Toast.makeText(getContext(), getString(R.string.google_maps_not_installed), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
