@@ -80,6 +80,7 @@ public class DetailActivity extends ActionBarActivity {
         private String forecastDetails;
 
         public DetailFragment() {
+            // Without this, system won't call the onCreateOptionsMenu.
             setHasOptionsMenu(true);
         }
 
@@ -93,7 +94,11 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             super.onCreateOptionsMenu(menu, inflater);
+
+            // Inflates the menus defined in detailfragment menu xml.
+            // without this, Share button in this case won't show up.
             inflater.inflate(R.menu.detailfragment, menu);
+
             // Find the menu item with ShareActionProvider
             MenuItem shareMenuItem = menu.findItem(R.id.action_share);
 
@@ -106,6 +111,7 @@ public class DetailActivity extends ActionBarActivity {
 
         /**
          * Updates the share intent to the shareActionProvider.
+         * Use this whenever the data you are sharing changes.
          *
          * @param shareIntent is the intent, the shareActionProvider is to be updated with.
          */
