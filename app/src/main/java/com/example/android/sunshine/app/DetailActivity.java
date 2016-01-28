@@ -17,6 +17,7 @@
 package com.example.android.sunshine.app;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,6 +93,7 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             super.onCreateOptionsMenu(menu, inflater);
+            inflater.inflate(R.menu.detailfragment, menu);
             // Find the menu item with ShareActionProvider
             MenuItem shareMenuItem = menu.findItem(R.id.action_share);
 
@@ -104,35 +106,41 @@ public class DetailActivity extends ActionBarActivity {
 
         /**
          * Updates the share intent to the shareActionProvider.
+         *
          * @param shareIntent is the intent, the shareActionProvider is to be updated with.
          */
         @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
         private void setShareIntent(Intent shareIntent) {
-            if(shareActionProvider != null) {
+            if (shareActionProvider != null) {
                 shareActionProvider.setShareIntent(shareIntent);
             }
         }
 
         /**
          * Creates intent of weather details to be shared.
+         *
          * @return returns an Intent object with weather data.
          */
         private Intent createShareIntent() {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
+            // If you leave out the flag, when returning to your app (from home screen, from
+            // recents etc.), you would see the Activity of the share target
+            // (messaging/mailing/IM app) instead of yours.
+            shareIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(
                     Intent.EXTRA_TEXT, forecastDetails + getString(R.string.hashSunshineApp));
             return shareIntent;
         }
 
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-
             Intent detailIntent = getActivity().getIntent();
-            if(detailIntent != null && detailIntent.hasExtra(Intent.EXTRA_TEXT)) {
+            if (detailIntent != null && detailIntent.hasExtra(Intent.EXTRA_TEXT)) {
                 forecastDetails = detailIntent.getStringExtra(Intent.EXTRA_TEXT);
                 TextView detailTextView = (TextView) rootView.findViewById(R.id.detail_text_view);
                 detailTextView.setText(forecastDetails);
