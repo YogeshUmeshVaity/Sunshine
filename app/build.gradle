@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+
+
 android {
     compileSdkVersion 23
     buildToolsVersion "21.1.2"
@@ -18,7 +20,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', '"319dfcb545fadb2c802dd499b6c8c8f1"'
+        it.buildConfigField 'String', 'OPEN_WEATHER_MAP_API_KEY', System.getenv("SUNSHINE_KEY")
     }
 }
 
