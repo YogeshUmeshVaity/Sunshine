@@ -147,6 +147,7 @@ public class ForecastFragment extends Fragment {
         }
         if(id == R.id.action_show_location) {
             showLocationMap();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -275,7 +276,7 @@ public class ForecastFragment extends Fragment {
                 Log.e(LOG_TAG, jsonException.getMessage(), jsonException);
                 jsonException.printStackTrace();
             }
-            // If there is an error getting the forecast or parsing th forecast
+            // If there is an error getting the forecast or parsing the forecast
             return null;
         }
 

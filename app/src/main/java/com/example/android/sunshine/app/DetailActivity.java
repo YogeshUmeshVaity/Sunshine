@@ -103,7 +103,8 @@ public class DetailActivity extends ActionBarActivity {
             MenuItem shareMenuItem = menu.findItem(R.id.action_share);
 
             // Assign ShareActionProvider object to member variable when the options menu is created.
-            shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
+            shareActionProvider =
+                    (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
 
             // Update the shareActionProvider with the intent.
             setShareIntent(createShareIntent());
