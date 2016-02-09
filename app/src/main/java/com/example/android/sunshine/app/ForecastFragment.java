@@ -318,20 +318,19 @@ public class ForecastFragment extends Fragment {
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
             // Get preference value from temperature unit setting
-            SharedPreferences sharedPreferences =
+            SharedPreferences settings =
                     PreferenceManager.getDefaultSharedPreferences(getContext());
-            String temperatureUnit = sharedPreferences.getString(
+            String temperatureUnitSetting = settings.getString(
                     getString(R.string.pref_temperature_units_key),
                     getString(R.string.pref_temperature_units_metric_value));
             // Convert temperatures according to settings
             // 1 = Imperial(Fahrenheit)
-            if (temperatureUnit.equals(getString(R.string.pref_temperature_units_imperial_value))) {
+            if (temperatureUnitSetting.equals(getString(R.string.pref_temperature_units_imperial_value))) {
                 roundedHigh = convertCelsiusToFahrenheit(roundedHigh);
                 roundedLow = convertCelsiusToFahrenheit(roundedLow);
             }
 
-            String highLowStr = roundedHigh + "/" + roundedLow;
-            return highLowStr;
+            return roundedHigh + "/" + roundedLow;
         }
 
         private long convertCelsiusToFahrenheit(long celsius) {
