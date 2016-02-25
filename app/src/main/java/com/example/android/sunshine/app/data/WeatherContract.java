@@ -69,7 +69,7 @@ public class WeatherContract {
         // Humidity is stored as a float representing percentage
         public static final String COLUMN_PRESSURE = "pressure";
 
-        // Windspeed is stored as a float representing windspeed  mph
+        // Wind-speed is stored as a float representing wind-speed  mph
         public static final String COLUMN_WIND_SPEED = "wind";
 
         // Degrees are meteorological degrees (e.g, 0 is north, 180 is south).  Stored as floats.
