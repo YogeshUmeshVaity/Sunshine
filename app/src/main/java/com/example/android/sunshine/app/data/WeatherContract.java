@@ -33,14 +33,20 @@ public class WeatherContract {
         return time.setJulianDay(julianDay);
     }
 
-    /*
-        Inner class that defines the table contents of the location table
-        Students: This is where you will add the strings.  (Similar to what has been
-        done for WeatherEntry)
-     */
+    /** Inner class that defines the table contents of the location table. */
     public static final class LocationEntry implements BaseColumns {
         public static final String TABLE_NAME = "location";
 
+        // Will be used as location query to openweathermap.
+        public static final String COLUMN_LOCATION_SETTING = "location_setting";
+
+        // Human readable location name provided by the api. Because for styling, "Mountain View" is
+        // more recognizable than 94043.
+        public static final String COLUMN_CITY_NAME = "city_name";
+
+        // To uniquely pinpoint location on map. These are returned by the API.
+        public static final String COLUMN_COORD_LAT = "coord_lat";
+        public static final String COLUMN_COORD_LONG = "coord_long";
     }
 
     /* Inner class that defines the table contents of the weather table */

@@ -41,6 +41,7 @@ public class TestUtilities extends AndroidTestCase {
         }
     }
 
+    // TODO: 26/2/16 Remove these 'students' statements when project completes.
     /*
         Students: Use this to create some default weather values for your database tests.
      */
