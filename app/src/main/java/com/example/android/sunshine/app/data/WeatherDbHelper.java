@@ -65,13 +65,18 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 LocationEntry.TABLE_NAME + " (" + LocationEntry._ID + "), " +
 
                 // To assure the application have just one weather entry per day
-                // per location, it's created a UNIQUE constraint with REPLACE strategy
+                // per location, it's created a UNIQUE constraint with REPLACE strategy.
+                // The default conflict resolution algorithm is ON CONFLICT ABORT.
                 " UNIQUE (" + WeatherEntry.COLUMN_DATE + ", " +
                 WeatherEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
 
         // Construct SQL query to create location table.
         final String SQL_CREATE_LOCATION_TABLE = "CREATE TABLE " + LocationEntry.TABLE_NAME + " (" +
                 LocationEntry._ID + " INTEGER PRIMARY KEY, " +
+                // A UNIQUE constraint is similar to a PRIMARY KEY constraint, except that a single
+                // table may have any number of UNIQUE constraints. For each UNIQUE constraint on
+                // the table, each row must contain a unique combination of values in the columns
+                // identified by the UNIQUE constraint.
                 LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
                 LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL, " +
