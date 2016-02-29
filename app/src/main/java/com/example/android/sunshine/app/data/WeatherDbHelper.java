@@ -44,13 +44,13 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 // forecasting, it's reasonable to assume the user will want information
                 // for a certain date and all dates *following*, so the forecast data
                 // should be sorted accordingly.
-                WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                WeatherEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
                 // the ID of the location entry associated with this weather data
                 WeatherEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
                 WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
                 WeatherEntry.COLUMN_SHORT_DESC + " TEXT NOT NULL, " +
-                WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL," +
+                WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL, " +
 
                 WeatherEntry.COLUMN_MIN_TEMP + " REAL NOT NULL, " +
                 WeatherEntry.COLUMN_MAX_TEMP + " REAL NOT NULL, " +
