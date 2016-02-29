@@ -15,6 +15,7 @@
  */
 package com.example.android.sunshine.app.data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -112,22 +113,40 @@ public class TestDb extends AndroidTestCase {
     */
     public void testLocationTable() {
         // First step: Get reference to writable database
+        SQLiteDatabase db = new WeatherDbHelper(this.mContext).getWritableDatabase();
+
+        // ContentValues represent row of data with key value pairs of column names and
+        // their values, they are used for writing rows/records to database.
 
         // Create ContentValues of what you want to insert
         // (you can use the createNorthPoleLocationValues if you wish)
+        ContentValues locationRecordValues = TestUtilities.createNorthPoleLocationValues();
 
         // Insert ContentValues into database and get a row ID back
+        long rowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, locationRecordValues);
+        assertFalse("Error: failed to insert location record in the database", rowId == -1);
 
         // Query the database and receive a Cursor back
+        Cursor locationRecordsCursor = db.query(
+                WeatherContract.LocationEntry.TABLE_NAME,
+                null, null, null, null, null, null);
 
         // Move the cursor to a valid database row
+        assertTrue("Error: unable to query the rows in location table.",
+                locationRecordsCursor.moveToFirst());
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
+        TestUtilities.validateCurrentRecord(
+                "Error: ContentValues are not equal.",
+                locationRecordsCursor, locationRecordValues);
+
+        assertFalse("Error: more than one entry returned.", locationRecordsCursor.moveToNext());
 
         // Finally, close the cursor and database
-
+        locationRecordsCursor.close();
+        db.close();
     }
 
     /*
