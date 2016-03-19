@@ -78,13 +78,13 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         SharedPreferences sharedPrefs =
                 PreferenceManager.getDefaultSharedPreferences(mContext);
         String unitType = sharedPrefs.getString(
-                mContext.getString(R.string.pref_units_key),
-                mContext.getString(R.string.pref_units_metric));
+                mContext.getString(R.string.pref_temperature_units_key),
+                mContext.getString(R.string.pref_temperature_units_metric_value));
 
-        if (unitType.equals(mContext.getString(R.string.pref_units_imperial))) {
+        if (unitType.equals(mContext.getString(R.string.pref_temperature_units_imperial_value))) {
             high = (high * 1.8) + 32;
             low = (low * 1.8) + 32;
-        } else if (!unitType.equals(mContext.getString(R.string.pref_units_metric))) {
+        } else if (!unitType.equals(mContext.getString(R.string.pref_temperature_units_metric_value))) {
             Log.d(LOG_TAG, "Unit type not found: " + unitType);
         }
 
