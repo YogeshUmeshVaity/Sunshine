@@ -27,15 +27,18 @@ import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
  */
 public class WeatherDbHelper extends SQLiteOpenHelper {
 
+    static final String DATABASE_NAME = "weather.db";
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;
-
-    static final String DATABASE_NAME = "weather.db";
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /*
+     * This is called when the provider attempts to open the
+     * repository and SQLite reports that it doesn't exist.
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         final String SQL_CREATE_WEATHER_TABLE = "CREATE TABLE " + WeatherEntry.TABLE_NAME + " (" +

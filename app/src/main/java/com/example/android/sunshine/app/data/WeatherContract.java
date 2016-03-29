@@ -22,6 +22,11 @@ import android.provider.BaseColumns;
 import android.text.format.Time;
 
 /**
+ * The class establishes a contract between the provider and other applications by ensuring that
+ * the provider can be correctly accessed even if there are changes to the actual values of URIs,
+ * column names, and so forth.
+ *
+ * // TODO: 28/3/16 Contract class should be a public final class
  * Defines table and column names for the weather database.
  */
 public class WeatherContract {
@@ -75,7 +80,7 @@ public class WeatherContract {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_LOCATION).build();
 
-        //  Custom MIME type strings, also called "vendor-specific" MIME types, have more complex
+        // Custom MIME type strings, also called "vendor-specific" MIME types, have more complex
         // type and subtype values. The type value is always vnd.android.cursor.dir which is
         // ContentResolver.CURSOR_DIR_BASE_TYPE here for multiple rows or vnd.android.cursor.item
         // for single row. /CONTENT_AUTHORITY/PATH_LOCATION is its subtype. For more info:http://developer.android.com/guide/topics/providers/content-provider-basics.html#MIMETypeReference
@@ -136,6 +141,7 @@ public class WeatherContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
 
+        // Uri for a particular row. id is the rowId.
         public static Uri buildWeatherUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
