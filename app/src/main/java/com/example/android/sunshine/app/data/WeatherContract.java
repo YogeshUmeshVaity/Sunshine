@@ -26,7 +26,7 @@ import android.text.format.Time;
  * the provider can be correctly accessed even if there are changes to the actual values of URIs,
  * column names, and so forth.
  *
- * // TODO: 28/3/16 Contract class should be a public final class
+ *  TODO:Contract class should be a public final class and it should have private constructor to prevent it from being instantiated.
  * Defines table and column names for the weather database.
  */
 public class WeatherContract {
@@ -58,7 +58,6 @@ public class WeatherContract {
         int julianDay = Time.getJulianDay(startDate, time.gmtoff);
         return time.setJulianDay(julianDay);
     }
-
 
     /**
      * Inner class that defines the table contents of the location table.

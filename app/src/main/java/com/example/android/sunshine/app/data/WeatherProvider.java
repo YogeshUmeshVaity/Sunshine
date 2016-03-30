@@ -152,6 +152,32 @@ public class WeatherProvider extends ContentProvider {
         );
     }
 
+    private Cursor getWeather(Uri uri, String[] projection, String selection,
+                              String[] selectionArgs, String sortOrder) {
+        SQLiteDatabase database = mOpenHelper.getReadableDatabase();
+        return database.query(
+                WeatherContract.WeatherEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+    }
+
+    private Cursor getLocation(Uri uri, String[] projection, String selection,
+                               String[] selectionArgs, String sortOrder) {
+        SQLiteDatabase database = mOpenHelper.getReadableDatabase();
+        return database.query(
+                WeatherContract.LocationEntry.TABLE_NAME,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder);
+    }
+
     /*
         Students: We've coded this for you.  We just create a new WeatherDbHelper for later use
         here.
@@ -182,8 +208,10 @@ public class WeatherProvider extends ContentProvider {
 
         switch (match) {
             // Student: Uncomment and fill out these two cases
-//            case WEATHER_WITH_LOCATION_AND_DATE:
-//            case WEATHER_WITH_LOCATION:
+            case WEATHER_WITH_LOCATION_AND_DATE:
+                return WeatherContract.WeatherEntry.CONTENT_ITEM_TYPE;
+            case WEATHER_WITH_LOCATION:
+                return WeatherContract.WeatherEntry.CONTENT_TYPE;
             case WEATHER:
                 return WeatherContract.WeatherEntry.CONTENT_TYPE;
             case LOCATION:
@@ -212,12 +240,12 @@ public class WeatherProvider extends ContentProvider {
             }
             // "weather"
             case WEATHER: {
-                retCursor = null;
+                retCursor = getWeather(uri, projection, selection, selectionArgs, sortOrder);
                 break;
             }
             // "location"
             case LOCATION: {
-                retCursor = null;
+                retCursor = getLocation(uri, projection, selection, selectionArgs, sortOrder);
                 break;
             }
 
@@ -227,6 +255,8 @@ public class WeatherProvider extends ContentProvider {
                 // an invalid content URI)
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
+        // Useful info about this method:
+        // http://stackoverflow.com/questions/21623714/what-is-cursor-setnotificationuri-used-for
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
