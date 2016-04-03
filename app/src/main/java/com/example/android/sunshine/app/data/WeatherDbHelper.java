@@ -52,6 +52,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 // the ID of the location entry associated with this weather data
                 WeatherEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
                 WeatherEntry.COLUMN_DATE + " INTEGER NOT NULL, " +
+                // TODO: 30/3/16 rename short_desc to full name short_description 
                 WeatherEntry.COLUMN_SHORT_DESC + " TEXT NOT NULL, " +
                 WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL, " +
 
@@ -82,6 +83,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 // identified by the UNIQUE constraint.
                 LocationEntry.COLUMN_LOCATION_SETTING + " TEXT UNIQUE NOT NULL, " +
                 LocationEntry.COLUMN_CITY_NAME + " TEXT NOT NULL, " +
+                // TODO: 30/3/16 Remanme these two to full names like colomn_coord_latitude. 
                 LocationEntry.COLUMN_COORD_LAT + " REAL NOT NULL, " +
                 LocationEntry.COLUMN_COORD_LONG + " REAL NOT NULL)";
 

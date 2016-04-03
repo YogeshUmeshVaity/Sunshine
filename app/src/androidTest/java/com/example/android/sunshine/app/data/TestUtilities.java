@@ -98,6 +98,10 @@ public class TestUtilities extends AndroidTestCase {
         return locationRowId;
     }
 
+    static TestContentObserver getTestContentObserver() {
+        return TestContentObserver.getTestContentObserver();
+    }
+
     /*
         Students: The functions we provide inside of TestProvider use this utility class to test
         the ContentObserver callbacks using the PollingCheck class that we grabbed from the Android
@@ -110,15 +114,22 @@ public class TestUtilities extends AndroidTestCase {
         final HandlerThread mHT;
         boolean mContentChanged;
 
-        static TestContentObserver getTestContentObserver() {
-            HandlerThread ht = new HandlerThread("ContentObserverThread");
-            ht.start();
-            return new TestContentObserver(ht);
-        }
-
+        /**
+         * There are two main uses for a Handler:
+         * (1) to schedule messages and runnables to be executed as some point in the future.
+         * (2) to enqueue an action to be performed on a different thread than your own.
+         */
         private TestContentObserver(HandlerThread ht) {
             super(new Handler(ht.getLooper()));
             mHT = ht;
+        }
+
+        static TestContentObserver getTestContentObserver() {
+            // This is a content observer thread, it receives the callbacks when the content is
+            // changed.
+            HandlerThread ht = new HandlerThread("ContentObserverThread");
+            ht.start();
+            return new TestContentObserver(ht);
         }
 
         // On earlier versions of Android, this onChange method is called
@@ -135,7 +146,7 @@ public class TestUtilities extends AndroidTestCase {
         public void waitForNotificationOrFail() {
             // Note: The PollingCheck class is taken from the Android CTS (Compatibility Test Suite).
             // It's useful to look at the Android CTS source for ideas on how to test your Android
-            // applications.  The reason that PollingCheck works is that, by default, the JUnit
+            // applications. The reason that PollingCheck works is that, by default, the JUnit
             // testing framework is not running on the main Android application thread.
             new PollingCheck(5000) {
                 @Override
@@ -145,9 +156,5 @@ public class TestUtilities extends AndroidTestCase {
             }.run();
             mHT.quit();
         }
-    }
-
-    static TestContentObserver getTestContentObserver() {
-        return TestContentObserver.getTestContentObserver();
     }
 }
