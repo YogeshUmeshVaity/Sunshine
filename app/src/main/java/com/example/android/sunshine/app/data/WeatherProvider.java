@@ -300,17 +300,40 @@ public class WeatherProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Student: Start by getting a writable database
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
         // Student: Use the uriMatcher to match the WEATHER and LOCATION URI's we are going to
         // handle.  If it doesn't match these, throw an UnsupportedOperationException.
-
+        final int match = sUriMatcher.match(uri);
+        int rowsDeleted;
+        // If the WHERE clause is omitted, the DBMS will assume that the condition is TRUE for all
+        // rows (and so DELETE every row).
+        // This is how you specify the true boolean condition.
+        // For explanation : http://dba.stackexchange.com/questions/54954/why-use-where-1-or-where-1-1?newreg=57f8c0c736534e03b9dfc153e764727a
+        // This makes delete all rows return the number of rows deleted.
+        if (selection == null) selection = "1";
         // Student: A null value deletes all rows.  In my implementation of this, I only notified
         // the uri listeners (using the content resolver) if the rowsDeleted != 0 or the selection
         // is null.
-        // Oh, and you should notify the listeners here.
+        switch (match) {
+            case WEATHER:
+                rowsDeleted = db.delete(WeatherContract.WeatherEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
 
-        // Student: return the actual rows deleted
-        return 0;
+            case LOCATION:
+                rowsDeleted = db.delete(WeatherContract.LocationEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        // Because a null deletes all rows
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     private void normalizeDate(ContentValues values) {
@@ -326,7 +349,26 @@ public class WeatherProvider extends ContentProvider {
             Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // Student: This is a lot like the delete function.  We return the number of rows impacted
         // by the update.
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowUpdated;
+        switch (match) {
+            case WEATHER:
+                normalizeDate(values);
+                rowUpdated = db.update(WeatherContract.WeatherEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
+                break;
+
+            case LOCATION:
+                rowUpdated = db.update(WeatherContract.LocationEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowUpdated;
     }
 
     @Override
