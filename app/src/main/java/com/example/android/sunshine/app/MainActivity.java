@@ -47,4 +47,5 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // TODO: 11/4/16 showLocationOnMap() and onOptionsItemSelected contents to be moved in MainActivity like in course. 
 }
