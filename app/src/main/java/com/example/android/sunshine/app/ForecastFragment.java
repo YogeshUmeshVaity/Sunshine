@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,9 +23,10 @@ import com.example.android.sunshine.app.data.WeatherContract;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment {
+public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = "ForecastFragment";
+    private static final int FORECAST_LOADER_ID = 0;
     private ForecastAdapter mForecastAdapter;
 
     public ForecastFragment() {
@@ -33,21 +38,8 @@ public class ForecastFragment extends Fragment {
         // Must set this to true here to have the options menu of fragment appear.
         setHasOptionsMenu(true);
 
-        String locationSetting = Utility.getPreferredLocation(getActivity());
-
-        // Sort order ascending by date
-        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-                locationSetting, System.currentTimeMillis());
-
-        Cursor cursor = getActivity()
-                .getContentResolver()
-                .query(weatherForLocationUri, null, null, null, sortOrder);
-
-        // The CursorAdapter will take data from our cursor and populate the ListView
-        // However, we cannot use FLAG_AUTO_REQUERY since it is deprecated, so we will end
-        // up with an empty list the first time we run.
-        mForecastAdapter = new ForecastAdapter(getActivity(), cursor, 0);
+        // The CursorAdapter will take data from our cursor using Loader and populate the ListView.
+        mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -56,6 +48,41 @@ public class ForecastFragment extends Fragment {
         forecastListView.setAdapter(mForecastAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        // Prepare the loader. Either re-connect with an existing one, or start a new one.
+        getLoaderManager().initLoader(FORECAST_LOADER_ID, null, this);
+
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        final String locationSetting = Utility.getPreferredLocation(getActivity());
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+
+        return new CursorLoader(getActivity(), weatherForLocationUri, null, null, null, sortOrder);
+    }
+
+    // This method is called when the Loader completes querying process and the data is ready.
+    // We should not close the old cursor.
+    // The framework will take care of closing the old cursor once we return.
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor newData) {
+        mForecastAdapter.swapCursor(newData);
+    }
+
+    // This is called when the last Cursor provided to onLoadFinished() above is about to be closed.
+    // We need to make sure we are no longer using it.
+    // Here we are removing the reference of previous Cursor from our adapter.
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mForecastAdapter.swapCursor(null);
     }
 
     /**
