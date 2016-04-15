@@ -16,12 +16,16 @@
 
 package com.example.android.sunshine.app;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.ShareActionProvider;
@@ -32,6 +36,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.android.sunshine.app.data.WeatherContract;
 
 public class DetailActivity extends ActionBarActivity {
 
@@ -73,7 +79,41 @@ public class DetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class DetailFragment extends Fragment {
+    public static class DetailFragment extends Fragment
+            implements LoaderManager.LoaderCallbacks<Cursor> {
+
+        // These constants correspond to the projection defined above, and must change if the
+        // projection changes
+        static final int COL_WEATHER_ID = 0;
+        static final int COL_WEATHER_DATE = 1;
+        static final int COL_WEATHER_DESC = 2;
+        static final int COL_WEATHER_MAX_TEMP = 3;
+        static final int COL_WEATHER_MIN_TEMP = 4;
+        static final int COL_LOCATION_SETTING = 5;
+        static final int COL_WEATHER_CONDITION_ID = 6;
+        static final int COL_WEATHER_HUMIDITY = 7;
+        static final int COL_WEATHER_PRESSURE = 8;
+        static final int COL_WEATHER_WIND_SPEED = 9;
+
+
+        private static final String[] DETAILS_COLUMNS = {
+                // In this case the id needs to be fully qualified with a table name, since
+                // the content provider joins the location & weather tables in the background
+                // (both have an _id column)
+                // On the one hand, that's annoying.  On the other, you can search the weather table
+                // using the location set by the user, which is only in the Location table.
+                // So the convenience is worth it.
+                WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
+                WeatherContract.WeatherEntry.COLUMN_DATE,
+                WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
+                WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
+                WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
+                WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
+                WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
+                WeatherContract.WeatherEntry.COLUMN_PRESSURE,
+                WeatherContract.WeatherEntry.COLUMN_WIND_SPEED
+        };
+        private static final int DETAILS_LOADER = 1;
 
         private ShareActionProvider shareActionProvider;
         private String forecastDetails;
@@ -106,19 +146,8 @@ public class DetailActivity extends ActionBarActivity {
                     (ShareActionProvider) MenuItemCompat.getActionProvider(shareMenuItem);
 
             // Update the shareActionProvider with the intent.
-            setShareIntent(createShareIntent());
-        }
-
-        /**
-         * Updates the share intent to the shareActionProvider.
-         * Use this whenever the data you are sharing changes.
-         *
-         * @param shareIntent is the intent, the shareActionProvider is to be updated with.
-         */
-        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-        private void setShareIntent(Intent shareIntent) {
-            if (shareActionProvider != null) {
-                shareActionProvider.setShareIntent(shareIntent);
+            if (forecastDetails != null) {
+                shareActionProvider.setShareIntent(createShareIntent());
             }
         }
 
@@ -144,17 +173,49 @@ public class DetailActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-            Intent detailIntent = getActivity().getIntent();
-            if (detailIntent != null) {
-                forecastDetails = detailIntent.getDataString();
-            }
-            if (forecastDetails != null) {
-                TextView detailTextView = (TextView) rootView.findViewById(R.id.detail_text_view);
-                detailTextView.setText(forecastDetails);
-            }
+            return inflater.inflate(R.layout.fragment_detail, container, false);
+        }
 
-            return rootView;
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            getLoaderManager().initLoader(DETAILS_LOADER, null, this);
+            super.onActivityCreated(savedInstanceState);
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            Uri weatherForDateUri;
+            Intent detailIntent = getActivity().getIntent();
+            if (detailIntent == null) return null;
+            weatherForDateUri = detailIntent.getData();
+            return new CursorLoader(getActivity(), weatherForDateUri, DETAILS_COLUMNS,
+                    null, null, null);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            // Move the cursor to first row as well as test if it's null.
+            if (!cursor.moveToFirst()) return;
+
+            String date = Utility.formatDate(cursor.getLong(COL_WEATHER_DATE));
+            String weatherDescription = cursor.getString(COL_WEATHER_DESC);
+            boolean isMetric = Utility.isMetric(getActivity());
+            String high = Utility.formatTemperature(
+                    cursor.getDouble(COL_WEATHER_MAX_TEMP), isMetric);
+            String low = Utility.formatTemperature(
+                    cursor.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
+
+            forecastDetails = String.format("%s - %s - %s/%s", date, weatherDescription, high, low);
+            TextView detailTextView = (TextView) getView().findViewById(R.id.detail_text_view);
+            detailTextView.setText(forecastDetails);
+
+            if (shareActionProvider != null) {
+                shareActionProvider.setShareIntent(createShareIntent());
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
         }
     }
 }
