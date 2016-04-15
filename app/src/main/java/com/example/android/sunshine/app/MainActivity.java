@@ -10,15 +10,34 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
     private static final String LOG_TAG = "MainActivity";
+    private static final String FORECASTFRAGMENT_TAG = "ForecastFragment";
+
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mLocation = Utility.getPreferredLocation(this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container_main, new ForecastFragment())
+                    .add(R.id.container_main, new ForecastFragment(), FORECASTFRAGMENT_TAG)
                     .commit();
+            //getSupportFragmentManager().executePendingTransactions();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String changedLocation = Utility.getPreferredLocation(this);
+        if (changedLocation != null && !changedLocation.equals(mLocation)) {
+            ForecastFragment forecastFragment = (ForecastFragment) getSupportFragmentManager()
+                    .findFragmentByTag(FORECASTFRAGMENT_TAG);
+            if (forecastFragment != null) {
+                forecastFragment.onLocationChanged();
+            }
+            mLocation = changedLocation;
         }
     }
 
@@ -47,5 +66,6 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO: 11/4/16 showLocationOnMap() and onOptionsItemSelected contents to be moved in MainActivity like in course. 
+
+    // TODO: 11/4/16 showLocationOnMap() and onOptionsItemSelected contents to be moved in MainActivity like in course.
 }
