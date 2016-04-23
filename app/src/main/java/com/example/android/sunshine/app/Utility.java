@@ -45,7 +45,7 @@ public class Utility {
                 .equals(context.getString(R.string.pref_temperature_units_metric_value));
     }
 
-    static String formatTemperature(double temperature, boolean isMetric) {
+    static String formatTemperature(Context context, double temperature, boolean isMetric) {
         double temp;
         if (!isMetric) {
             temp = 9 * temperature / 5 + 32;
@@ -53,7 +53,7 @@ public class Utility {
             temp = temperature;
         }
         // %.0f is the format string for a float, with 0 decimal places.
-        return String.format("%.0f", temp);
+        return context.getString(R.string.format_temperature, temp);
     }
 
     static String formatDate(long dateInMilliseconds) {
