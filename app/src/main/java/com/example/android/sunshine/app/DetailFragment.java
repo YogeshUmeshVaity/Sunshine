@@ -194,7 +194,7 @@ public class DetailFragment extends Fragment
         pressureView.setText(getString(R.string.format_pressure, pressure));
 
         int weatherId = cursor.getInt(COL_WEATHER_CONDITION_ID);
-        forecastImage.setImageResource(R.drawable.ic_launcher);
+        forecastImage.setImageResource(R.drawable.art_clear);
 
         String weatherDescription = cursor.getString(COL_WEATHER_DESC);
         descriptionView.setText(weatherDescription);
