@@ -23,12 +23,14 @@ public class ForecastAdapter extends CursorAdapter {
         super(context, cursor, flags);
     }
 
+    // This is for supporting multi-layout
     @Override
     public int getItemViewType(int position) {
         // super.getItemViewType(position);
         return position == 0 ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
     }
 
+    // This is for supporting multi-layout
     @Override
     public int getViewTypeCount() {
         // super.getViewTypeCount();
@@ -59,12 +61,7 @@ public class ForecastAdapter extends CursorAdapter {
     //This is where we fill-in the views with the contents of the cursor.
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        // Read weather icon id from cursor.
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_ID);
-
-        // Use placeholder image for now.
-        viewHolder.iconView.setImageResource(R.drawable.art_clear);
 
         // Read date from cursor
         long date = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
@@ -83,6 +80,12 @@ public class ForecastAdapter extends CursorAdapter {
         // Read low temperature from cursor
         double low = cursor.getFloat(ForecastFragment.COL_WEATHER_MIN_TEMP);
         viewHolder.lowTempView.setText(Utility.formatTemperature(context, low, isMetric));
+
+        // Read weather icon id from cursor.
+        int weatherConditionId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
+//        if(view.l() == )
+//        viewHolder.iconView.setImageResource(
+//                Utility.getIconResourceForWeatherCondition(weatherConditionId));
     }
 
     /**

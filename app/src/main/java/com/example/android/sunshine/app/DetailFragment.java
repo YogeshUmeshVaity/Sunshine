@@ -193,8 +193,9 @@ public class DetailFragment extends Fragment
         float pressure = cursor.getFloat(COL_WEATHER_PRESSURE);
         pressureView.setText(getString(R.string.format_pressure, pressure));
 
-        int weatherId = cursor.getInt(COL_WEATHER_CONDITION_ID);
-        forecastImage.setImageResource(R.drawable.art_clear);
+        int weatherConditionId = cursor.getInt(COL_WEATHER_CONDITION_ID);
+        forecastImage.setImageResource(
+                Utility.getArtResourceForWeatherCondition(weatherConditionId));
 
         String weatherDescription = cursor.getString(COL_WEATHER_DESC);
         descriptionView.setText(weatherDescription);
