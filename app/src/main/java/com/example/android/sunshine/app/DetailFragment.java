@@ -156,7 +156,7 @@ public class DetailFragment extends Fragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri weatherForDateUri;
         Intent detailIntent = getActivity().getIntent();
-        if (detailIntent == null) return null;
+        if (detailIntent == null || detailIntent.getData() == null) return null;
         weatherForDateUri = detailIntent.getData();
         return new CursorLoader(getActivity(), weatherForDateUri, DETAILS_COLUMNS,
                 null, null, null);
