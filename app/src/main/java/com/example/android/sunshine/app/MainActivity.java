@@ -21,7 +21,7 @@ public class MainActivity extends ActionBarActivity {
         mLocation = Utility.getPreferredLocation(this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container_main, new ForecastFragment(), FORECASTFRAGMENT_TAG)
+                    .add(R.id.fragment_forecast, new ForecastFragment(), FORECASTFRAGMENT_TAG)
                     .commit();
             //getSupportFragmentManager().executePendingTransactions();
         }
