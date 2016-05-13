@@ -29,6 +29,9 @@ import com.example.android.sunshine.app.data.WeatherContract;
 public class DetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    Uri weatherForDateUri;
+    private static final String LOG_TAG = "DetailFragment";
+
     // These constants correspond to the projection defined above, and must change if the
     // projection changes
     static final int COL_WEATHER_ID = 0;
@@ -62,6 +65,7 @@ public class DetailFragment extends Fragment
             WeatherContract.WeatherEntry.COLUMN_DEGREES
     };
     private static final int DETAILS_LOADER = 1;
+    private static final String DATE_URI = "dateUri";
 
     private ShareActionProvider shareActionProvider;
     private String forecastDetails;
@@ -143,6 +147,15 @@ public class DetailFragment extends Fragment
         forecastImage = (ImageView) rootView.findViewById(R.id.forecast_image_view);
         descriptionView = (TextView) rootView.findViewById(R.id.description_text_view);
 
+        // Get uriBundle
+        Bundle uriBundle = getArguments();
+        if(uriBundle != null) {
+            weatherForDateUri = uriBundle.getParcelable(DATE_URI);
+        } else {
+            weatherForDateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                    Utility.getPreferredLocation(getActivity()), System.currentTimeMillis());
+        }
+
         return rootView;
     }
 
@@ -152,14 +165,27 @@ public class DetailFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
     }
 
+    /**
+     * Creates and returns a new instance of this fragment using the specified date uri.
+     * @param dateUri date for which to create the fragment.
+     */
+    public static DetailFragment newInstance(Uri dateUri) {
+        Bundle uriBundle = new Bundle();
+        uriBundle.putParcelable(DATE_URI, dateUri);
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setArguments(uriBundle);
+        return detailFragment;
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri weatherForDateUri;
-        Intent detailIntent = getActivity().getIntent();
-        if (detailIntent == null || detailIntent.getData() == null) return null;
-        weatherForDateUri = detailIntent.getData();
         return new CursorLoader(getActivity(), weatherForDateUri, DETAILS_COLUMNS,
                 null, null, null);
+    }
+
+    public void updateDetails(Uri dateUri) {
+        weatherForDateUri = dateUri;
+        getLoaderManager().restartLoader(DETAILS_LOADER, null, this);
     }
 
     @Override
