@@ -50,6 +50,11 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             if (forecastFragment != null) {
                 forecastFragment.onLocationChanged();
             }
+            DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager()
+                    .findFragmentByTag(DETAILFRAGMENT_TAG);
+            if ( null != detailFragment ) {
+                detailFragment.onLocationChanged(changedLocation);
+            }
             mLocation = changedLocation;
         }
     }

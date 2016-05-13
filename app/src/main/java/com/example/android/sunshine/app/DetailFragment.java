@@ -149,7 +149,7 @@ public class DetailFragment extends Fragment
 
         // Get uriBundle
         Bundle uriBundle = getArguments();
-        if(uriBundle != null) {
+        if (uriBundle != null) {
             weatherForDateUri = uriBundle.getParcelable(DATE_URI);
         } else {
             weatherForDateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
@@ -167,6 +167,7 @@ public class DetailFragment extends Fragment
 
     /**
      * Creates and returns a new instance of this fragment using the specified date uri.
+     *
      * @param dateUri date for which to create the fragment.
      */
     public static DetailFragment newInstance(Uri dateUri) {
@@ -187,6 +188,18 @@ public class DetailFragment extends Fragment
         weatherForDateUri = dateUri;
         getLoaderManager().restartLoader(DETAILS_LOADER, null, this);
     }
+
+    void onLocationChanged(String newLocation) {
+        // replace the uri, since the location has changed
+        Uri uri = weatherForDateUri;
+        if (uri != null) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            weatherForDateUri = WeatherContract.WeatherEntry
+                    .buildWeatherLocationWithDate(newLocation, date);
+            getLoaderManager().restartLoader(DETAILS_LOADER, null, this);
+        }
+    }
+
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
