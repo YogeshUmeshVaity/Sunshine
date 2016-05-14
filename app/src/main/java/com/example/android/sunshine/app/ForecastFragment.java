@@ -1,6 +1,5 @@
 package com.example.android.sunshine.app;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -91,31 +90,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                     String locationSetting = Utility.getPreferredLocation(getActivity());
                     Uri uri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                             locationSetting, cursor.getLong(COL_WEATHER_DATE));
-                    mCallBack.onItemSelected(uri);
+                    ((Callback)getActivity()).onItemSelected(uri);
                 }
             }
         });
 
         return rootView;
-    }
-
-    // TODO: 12/5/16 rename Callback to OnItemSelectedListener
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // you must set this to null in onDetach().
-        if (context instanceof Callback) {
-            mCallBack = (Callback) context;
-        } else {
-            throw new ClassCastException(context.toString() +
-                    " must implement ForecastFragment.Callback.");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallBack = null;
     }
 
     @Override

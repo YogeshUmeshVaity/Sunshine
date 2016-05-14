@@ -87,10 +87,15 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     @Override
     public void onItemSelected(Uri dateUri) {
         if (mTwoPane) {
-            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
-            if(detailFragment != null) {
-                detailFragment.updateDetails(dateUri);
-            }
+            Bundle uriBundle = new Bundle();
+            uriBundle.putParcelable(DetailFragment.DETAIL_URI, dateUri);
+
+            DetailFragment detailFragment = new DetailFragment();
+            detailFragment.setArguments(uriBundle);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, detailFragment, DETAILFRAGMENT_TAG)
+                    .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.setData(dateUri);

@@ -17,7 +17,6 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -26,13 +25,16 @@ import android.view.MenuItem;
 public class DetailActivity extends ActionBarActivity {
 
     public static final String DATE_KEY = "date";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        Uri dateUri = getIntent().getData();
-        DetailFragment detailFragment = DetailFragment.newInstance(dateUri);
         if (savedInstanceState == null) {
+            Bundle uriBundle = new Bundle();
+            uriBundle.putParcelable(DetailFragment.DETAIL_URI, getIntent().getData());
+            DetailFragment detailFragment = new DetailFragment();
+            detailFragment.setArguments(uriBundle);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.weather_detail_container, detailFragment)
                     .commit();

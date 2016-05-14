@@ -65,7 +65,7 @@ public class DetailFragment extends Fragment
             WeatherContract.WeatherEntry.COLUMN_DEGREES
     };
     private static final int DETAILS_LOADER = 1;
-    private static final String DATE_URI = "dateUri";
+    public static final String DETAIL_URI = "detailUri";
 
     private ShareActionProvider shareActionProvider;
     private String forecastDetails;
@@ -133,6 +133,12 @@ public class DetailFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Get uriBundle
+        Bundle uriBundle = getArguments();
+        if (uriBundle != null) {
+            weatherForDateUri = uriBundle.getParcelable(DETAIL_URI);
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         // We initialize views here instead of onLoadFinished to prevent executing these statements
@@ -147,14 +153,6 @@ public class DetailFragment extends Fragment
         forecastImage = (ImageView) rootView.findViewById(R.id.forecast_image_view);
         descriptionView = (TextView) rootView.findViewById(R.id.description_text_view);
 
-        // Get uriBundle
-        Bundle uriBundle = getArguments();
-        if (uriBundle != null) {
-            weatherForDateUri = uriBundle.getParcelable(DATE_URI);
-        } else {
-            weatherForDateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-                    Utility.getPreferredLocation(getActivity()), System.currentTimeMillis());
-        }
 
         return rootView;
     }
@@ -165,28 +163,14 @@ public class DetailFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
     }
 
-    /**
-     * Creates and returns a new instance of this fragment using the specified date uri.
-     *
-     * @param dateUri date for which to create the fragment.
-     */
-    public static DetailFragment newInstance(Uri dateUri) {
-        Bundle uriBundle = new Bundle();
-        uriBundle.putParcelable(DATE_URI, dateUri);
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(uriBundle);
-        return detailFragment;
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), weatherForDateUri, DETAILS_COLUMNS,
-                null, null, null);
-    }
-
-    public void updateDetails(Uri dateUri) {
-        weatherForDateUri = dateUri;
-        getLoaderManager().restartLoader(DETAILS_LOADER, null, this);
+        if (weatherForDateUri != null) {
+            return new CursorLoader(getActivity(), weatherForDateUri, DETAILS_COLUMNS,
+                    null, null, null);
+        }
+        // Todo: when app is launched on tablet the detail fragment is empty unless the user selects an item. This is because the this method is returning null.
+        return null;
     }
 
     void onLocationChanged(String newLocation) {
