@@ -14,4 +14,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--No style for phone mode-->
+    <style name="ForecastListItemStyle"> </style>
+
 </resources>
