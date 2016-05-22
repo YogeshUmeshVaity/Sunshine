@@ -64,6 +64,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int selectedItemPosition = ListView.INVALID_POSITION;
     private ForecastAdapter mForecastAdapter;
     private ForecastFragment.Callback mCallBack;
+    private boolean specialTodayLayout;
 
     public ForecastFragment() {
     }
@@ -76,6 +77,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // The CursorAdapter will take data from our cursor using Loader and populate the ListView.
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
+        mForecastAdapter.setSpecialTodayLayout(specialTodayLayout);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -219,6 +221,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             outState.putInt(CURRENT_LIST_POSTION, selectedItemPosition);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    public void setSpecialTodayLayout(boolean specialTodayLayout) {
+        this.specialTodayLayout = specialTodayLayout;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setSpecialTodayLayout(specialTodayLayout);
+        }
     }
 
     /**

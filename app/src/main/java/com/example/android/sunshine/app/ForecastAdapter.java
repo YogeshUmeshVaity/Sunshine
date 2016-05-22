@@ -18,16 +18,21 @@ public class ForecastAdapter extends CursorAdapter {
     private static final int VIEW_TYPE_TODAY = 0;
     private static final int VIEW_TYPE_FUTURE_DAY = 1;
     private static final int VIEW_TYPE_COUNT = 2;
+    private boolean specialTodayLayout = false;
 
     public ForecastAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, flags);
+    }
+
+    public void setSpecialTodayLayout(boolean specialTodayLayout) {
+        this.specialTodayLayout = specialTodayLayout;
     }
 
     // This is for supporting multi-layout
     @Override
     public int getItemViewType(int position) {
         // super.getItemViewType(position);
-        return position == 0 ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
+        return position == 0 && specialTodayLayout ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
     }
 
     // This is for supporting multi-layout
