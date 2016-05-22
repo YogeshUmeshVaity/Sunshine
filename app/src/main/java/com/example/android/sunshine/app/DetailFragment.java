@@ -29,9 +29,7 @@ import com.example.android.sunshine.app.data.WeatherContract;
 public class DetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    Uri weatherForDateUri;
-    private static final String LOG_TAG = "DetailFragment";
-
+    public static final String DETAIL_URI = "detailUri";
     // These constants correspond to the projection defined above, and must change if the
     // projection changes
     static final int COL_WEATHER_ID = 0;
@@ -44,8 +42,7 @@ public class DetailFragment extends Fragment
     static final int COL_WEATHER_PRESSURE = 7;
     static final int COL_WEATHER_WIND_SPEED = 8;
     static final int COL_WEATHER_DEGREES = 9;
-
-
+    private static final String LOG_TAG = "DetailFragment";
     private static final String[] DETAILS_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
             // the content provider joins the location & weather tables in the background
@@ -65,8 +62,7 @@ public class DetailFragment extends Fragment
             WeatherContract.WeatherEntry.COLUMN_DEGREES
     };
     private static final int DETAILS_LOADER = 1;
-    public static final String DETAIL_URI = "detailUri";
-
+    Uri weatherForDateUri;
     private ShareActionProvider shareActionProvider;
     private String forecastDetails;
     private TextView dayView;
@@ -184,12 +180,12 @@ public class DetailFragment extends Fragment
         }
     }
 
-
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         // Move the cursor to first row as well as test if it's null.
         if (!cursor.moveToFirst()) return;
 
+        // TODO: 22/5/16 Fix date displaying twice in details fragment when item after current week is pressed.
         String date = Utility.getFormattedMonthDay(getActivity(), cursor.getLong(COL_WEATHER_DATE));
         dateView.setText(date);
         String friendlyDate = Utility.getFriendlyDayString(
