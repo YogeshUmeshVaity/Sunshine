@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/sunshine_dark_blue</item>
     </style>
 
+    <!--To display logo, need to set ForecastTheme to main activity theme attribute in manifest-->
     <!-- Main activity theme. -->
     <style name="ForecastTheme" parent="AppTheme">
         <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine.NoTitle</item>
@@ -16,10 +17,6 @@
         <item name="displayOptions">useLogo|showHome</item>
         <item name="logo">@drawable/ic_logo</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!--No style for phone mode-->
     <style name="ForecastListItemStyle">

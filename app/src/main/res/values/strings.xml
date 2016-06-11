@@ -9,7 +9,7 @@
     <!-- If it's a proper name or for debugging purposes, use translatable="false"
     for strings that you don't want translated to save translation costs -->
     <string name="action_refresh" translatable="false">Refresh</string>
-    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_detail">Details</string>
 
     <!-- Settings activity title [CHAR LIMIT=21] -->
     <string name="title_activity_settings">Settings</string>
