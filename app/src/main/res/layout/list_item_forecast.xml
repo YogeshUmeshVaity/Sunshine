@@ -14,6 +14,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:layout_gravity="center"
             android:id="@+id/list_item_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
+            android:layout_gravity="center_horizontal"
             android:textAppearance="?android:textAppearanceLarge"
             tools:text="21°" />
 
@@ -64,6 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
+            android:layout_gravity="center_horizontal"
             android:textAppearance="?android:textAppearanceSmall"
             tools:text="9°" />
 
