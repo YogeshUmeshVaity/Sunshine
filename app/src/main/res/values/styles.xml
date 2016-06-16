@@ -27,4 +27,15 @@
         This will be overridden in their respective configurations for tablets and other big screens.-->
     </style>
 
+    <style name="MaxTemperatureTextStyle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">@color/sunshine_headline_black</item>
+    </style>
+
+    <style name="MinTemperatureTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
 </resources>

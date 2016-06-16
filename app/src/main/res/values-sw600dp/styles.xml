@@ -3,4 +3,16 @@
     <style name="ForecastListItemStyle">
         <item name="android:choiceMode">singleChoice</item>
     </style>
+
+    <!--For Max and min temperatures text views in list item-->
+    <style name="MaxTemperatureTextStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">@color/sunshine_headline_black</item>
+    </style>
+    <style name="MinTemperatureTextStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+
+    </style>
 </resources>
