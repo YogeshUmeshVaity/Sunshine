@@ -15,12 +15,18 @@
             android:id="@+id/day_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/sunshine_headline_black"
+            android:textSize="24sp"
             tools:text="Today" />
 
         <TextView
             android:id="@+id/date_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/grey_700"
+            android:textSize="16sp"
             tools:text="June 24" />
 
         <!--High, low, image and weather-->
@@ -28,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -40,12 +47,19 @@
                     android:id="@+id/high_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/sunshine_headline_black"
+                    android:textSize="96sp"
                     tools:text="21°" />
 
                 <TextView
+                    android:layout_marginLeft="4dp"
                     android:id="@+id/low_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="48sp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/grey_700"
                     tools:text="9°" />
 
             </LinearLayout>
@@ -54,6 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginTop="8dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -67,6 +82,9 @@
                     android:id="@+id/description_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="22sp"
+                    android:textColor="@color/grey_700"
                     tools:text="Clear" />
 
             </LinearLayout>
@@ -78,20 +96,31 @@
             android:id="@+id/humidity_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Humidity: 84%°" />
+            android:textColor="@color/sunshine_headline_black"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_marginBottom="4dp"
+            tools:text="Humidity: 84%" />
 
-        <TextView
-            android:id="@+id/wind_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Wind: 6 km/H NW" />
 
         <TextView
             android:id="@+id/pressure_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/sunshine_headline_black"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-condensed"
             tools:text="Pressure: 1014 hPa" />
 
+        <TextView
+            android:layout_marginTop="4dp"
+            android:id="@+id/wind_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/sunshine_headline_black"
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-condensed"
+            tools:text="Wind: 6 km/H NW" />
     </LinearLayout>
 
 </ScrollView>

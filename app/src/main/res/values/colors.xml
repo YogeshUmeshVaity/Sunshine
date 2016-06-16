@@ -6,5 +6,7 @@
     <color name="sunshine_blue">#ff1ca8f4</color>
     <color name="sunshine_dark_blue">#0288D1</color>
     <color name="sunshine_white">#FFFFFF</color>
+    <color name="grey_700">#616161</color>
+    <color name="sunshine_headline_black">#de000000</color>
 
 </resources>
