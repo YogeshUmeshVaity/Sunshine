@@ -189,7 +189,7 @@ public class DetailFragment extends Fragment
         String date = Utility.getFormattedMonthDay(getActivity(), cursor.getLong(COL_WEATHER_DATE));
         dateView.setText(date);
         String friendlyDate = Utility.getFriendlyDayString(
-                getActivity(), cursor.getLong(COL_WEATHER_DATE));
+                getActivity(), cursor.getLong(COL_WEATHER_DATE), true);
         dayView.setText(friendlyDate);
 
         boolean isMetric = Utility.isMetric(getActivity());

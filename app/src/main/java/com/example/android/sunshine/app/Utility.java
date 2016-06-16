@@ -69,7 +69,7 @@ public class Utility {
      * @param dateInMillis The date in milliseconds
      * @return a user-friendly representation of the date.
      */
-    public static String getFriendlyDayString(Context context, long dateInMillis) {
+    public static String getFriendlyDayString(Context context, long dateInMillis, boolean withDate) {
         // The day string for forecast uses the following logic:
         // For today: "Today, June 8"
         // For tomorrow:  "Tomorrow"
@@ -81,6 +81,13 @@ public class Utility {
         long currentTime = System.currentTimeMillis();
         int julianDay = Time.getJulianDay(dateInMillis, time.gmtoff);
         int currentJulianDay = Time.getJulianDay(currentTime, time.gmtoff);
+
+        // withDate is true if this function is called for details fragment.
+        // In that case we don't need to proceed further. Just return Day. Because, the date is
+        // show separately in details fragment.
+        if(withDate) {
+            return getDayName(context, dateInMillis);
+        }
 
         // If the date we're building the String for is today's date, the format
         // is "Today, June 24"
