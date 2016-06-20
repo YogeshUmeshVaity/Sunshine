@@ -75,16 +75,24 @@ public class ForecastAdapter extends CursorAdapter {
         // Read weather forecast from cursor
         String weatherForecast = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
         viewHolder.descriptionView.setText(weatherForecast);
+        viewHolder.descriptionView.setContentDescription(
+                context.getString(R.string.forecast_description, weatherForecast));
 
         boolean isMetric = Utility.isMetric(context);
 
         // Read high temperature from cursor
-        double high = cursor.getFloat(ForecastFragment.COL_WEATHER_MAX_TEMP);
-        viewHolder.highTempView.setText(Utility.formatTemperature(context, high, isMetric));
+        double max = cursor.getFloat(ForecastFragment.COL_WEATHER_MAX_TEMP);
+        final String maxTemperature = Utility.formatTemperature(context, max, isMetric);
+        viewHolder.maxTempView.setText(maxTemperature);
+        viewHolder.maxTempView.setContentDescription(
+                context.getString(R.string.max_temperature_description, maxTemperature));
 
         // Read low temperature from cursor
-        double low = cursor.getFloat(ForecastFragment.COL_WEATHER_MIN_TEMP);
-        viewHolder.lowTempView.setText(Utility.formatTemperature(context, low, isMetric));
+        double min = cursor.getFloat(ForecastFragment.COL_WEATHER_MIN_TEMP);
+        final String minTemperature = Utility.formatTemperature(context, min, isMetric);
+        viewHolder.minTempView.setText(minTemperature);
+        viewHolder.minTempView.setContentDescription(
+                context.getString(R.string.min_temperature_description, minTemperature));
 
         // Read weather icon id from cursor.
         int weatherConditionId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
@@ -104,15 +112,15 @@ public class ForecastAdapter extends CursorAdapter {
         public final ImageView iconView;
         public final TextView dateView;
         public final TextView descriptionView;
-        public final TextView highTempView;
-        public final TextView lowTempView;
+        public final TextView maxTempView;
+        public final TextView minTempView;
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.list_item_icon);
             dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
             descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-            highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
-            lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            maxTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
+            minTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
         }
     }
 }

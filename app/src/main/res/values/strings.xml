@@ -73,5 +73,26 @@
     <!-- Humidity format CHAR LIMIT=25]-->
     <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
+    <!--Accessibility string for text-to-speech feature like Talkback-->
+    <string name="max_temperature_description">Maximum temperature is:
+        <xliff:g id="temperature">%1$s</xliff:g>
+    </string>
+    <string name="min_temperature_description">Minimum temperature is:
+        <xliff:g id="temperature">%1$s</xliff:g>
+    </string>
+    <string name="forecast_description">Weather forecast is:
+        <xliff:g id="temperature">%1$s</xliff:g>
+    </string>
+
+    <!--Complete wind direction names for accessibility text-to-speech -->
+    <string name="from_north">From North</string>
+    <string name="from_north_east">From North East</string>
+    <string name="from_east">From East</string>
+    <string name="from_south_east">From South-East</string>
+    <string name="from_south">From South</string>
+    <string name="from_south_west">From South-West</string>
+    <string name="from_west">From West</string>
+    <string name="from_north_west">From North-West</string>
+
 
 </resources>

@@ -189,6 +189,31 @@ public class Utility {
     }
 
     /**
+     * Returns complete direction names instead of short forms.
+     */
+    public static String getWindDirectionForAccessibility(Context context, float degrees) {
+        String direction = "Unknown";
+        if (degrees >= 337.5 || degrees < 22.5) {
+            direction = context.getString(R.string.from_north);      //"N"
+        } else if (degrees >= 22.5 && degrees < 67.5) {
+            direction = context.getString(R.string.from_north_east); //"NE"
+        } else if (degrees >= 67.5 && degrees < 112.5) {
+            direction = context.getString(R.string.from_east);       //"E"
+        } else if (degrees >= 112.5 && degrees < 157.5) {
+            direction = context.getString(R.string.from_south_east); //"SE"
+        } else if (degrees >= 157.5 && degrees < 202.5) {
+            direction = context.getString(R.string.from_south);      //"S"
+        } else if (degrees >= 202.5 && degrees < 247.5) {
+            direction = context.getString(R.string.from_south_west); //"SW"
+        } else if (degrees >= 247.5 && degrees < 292.5) {
+            direction = context.getString(R.string.from_west);       //"W"
+        } else if (degrees >= 292.5 || degrees < 22.5) {
+            direction = context.getString(R.string.from_north_west); //"NW"
+        }
+        return direction;
+    }
+
+    /**
      * Helper method to provide the icon resource id according to the weather condition id returned
      * by the OpenWeatherMap call.
      * @param weatherId from OpenWeatherMap API response

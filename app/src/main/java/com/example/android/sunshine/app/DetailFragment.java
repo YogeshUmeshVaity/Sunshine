@@ -67,8 +67,8 @@ public class DetailFragment extends Fragment
     private String forecastDetails;
     private TextView dayView;
     private TextView dateView;
-    private TextView highView;
-    private TextView lowView;
+    private TextView maxTempView;
+    private TextView minTempView;
     private TextView humidityView;
     private TextView windView;
     private TextView pressureView;
@@ -141,8 +141,8 @@ public class DetailFragment extends Fragment
         // every time the loader refreshes.
         dayView = (TextView) rootView.findViewById(R.id.day_text_view);
         dateView = (TextView) rootView.findViewById(R.id.date_text_view);
-        highView = (TextView) rootView.findViewById(R.id.high_text_view);
-        lowView = (TextView) rootView.findViewById(R.id.low_text_view);
+        maxTempView = (TextView) rootView.findViewById(R.id.high_text_view);
+        minTempView = (TextView) rootView.findViewById(R.id.low_text_view);
         humidityView = (TextView) rootView.findViewById(R.id.humidity_text_view);
         windView = (TextView) rootView.findViewById(R.id.wind_text_view);
         pressureView = (TextView) rootView.findViewById(R.id.pressure_text_view);
@@ -193,13 +193,17 @@ public class DetailFragment extends Fragment
         dayView.setText(friendlyDate);
 
         boolean isMetric = Utility.isMetric(getActivity());
-        String high = Utility.formatTemperature(
+        String maxTemperature = Utility.formatTemperature(
                 getActivity(), cursor.getDouble(COL_WEATHER_MAX_TEMP), isMetric);
-        highView.setText(high);
+        maxTempView.setText(maxTemperature);
+        maxTempView.setContentDescription(
+                getString(R.string.max_temperature_description, maxTemperature));
 
-        String low = Utility.formatTemperature(
+        String minTemperature = Utility.formatTemperature(
                 getActivity(), cursor.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
-        lowView.setText(low);
+        minTempView.setText(minTemperature);
+        minTempView.setContentDescription(
+                getString(R.string.min_temperature_description, minTemperature));
 
         float humidity = cursor.getFloat(COL_WEATHER_HUMIDITY);
         humidityView.setText(getString(R.string.format_humidity, humidity));
@@ -207,6 +211,8 @@ public class DetailFragment extends Fragment
         float windSpeed = cursor.getFloat(COL_WEATHER_WIND_SPEED);
         float degrees = cursor.getFloat(COL_WEATHER_DEGREES);
         windView.setText(Utility.getFormattedWind(getActivity(), windSpeed, degrees));
+        windView.setContentDescription(Utility.getWindDirectionForAccessibility(
+                getActivity(), degrees));
 
         float pressure = cursor.getFloat(COL_WEATHER_PRESSURE);
         pressureView.setText(getString(R.string.format_pressure, pressure));
@@ -217,8 +223,10 @@ public class DetailFragment extends Fragment
 
         String weatherDescription = cursor.getString(COL_WEATHER_DESC);
         descriptionView.setText(weatherDescription);
+        descriptionView.setContentDescription(
+                getString(R.string.forecast_description, weatherDescription));
 
-        forecastDetails = String.format("%s - %s - %s/%s", date, weatherDescription, high, low);
+        forecastDetails = String.format("%s - %s - %s/%s", date, weatherDescription, maxTemperature, minTemperature);
         if (shareActionProvider != null) {
             shareActionProvider.setShareIntent(createShareIntent());
         }
