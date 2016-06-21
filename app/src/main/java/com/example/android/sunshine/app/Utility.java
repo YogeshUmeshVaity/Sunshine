@@ -155,7 +155,8 @@ public class Utility {
         return monthDayString;
     }
 
-    public static String getFormattedWind(Context context, float windSpeed, float degrees) {
+    public static WindDirection getFormattedWind(Context context, float windSpeed, float degrees) {
+        WindDirection windDirection = new WindDirection();
         int windFormat;
         if (Utility.isMetric(context)) {
             windFormat = R.string.format_wind_kmh;
@@ -168,49 +169,37 @@ public class Utility {
         // You know what's fun, writing really long if/else statements with tons of possible
         // conditions.  Seriously, try it!
         String direction = "Unknown";
+        String contentDescription = "Unknown";
         if (degrees >= 337.5 || degrees < 22.5) {
-            direction = "N";
+            contentDescription = context.getString(R.string.from_north);
+            direction = context.getString(R.string.north);
         } else if (degrees >= 22.5 && degrees < 67.5) {
-            direction = "NE";
+            contentDescription = context.getString(R.string.from_north_east);
+            direction = context.getString(R.string.north_east);
         } else if (degrees >= 67.5 && degrees < 112.5) {
-            direction = "E";
+            contentDescription = context.getString(R.string.from_east);
+            direction = context.getString(R.string.east);
         } else if (degrees >= 112.5 && degrees < 157.5) {
-            direction = "SE";
+            contentDescription = context.getString(R.string.from_south_east);
+            direction = context.getString(R.string.south_east);
         } else if (degrees >= 157.5 && degrees < 202.5) {
-            direction = "S";
+            contentDescription = context.getString(R.string.from_south);
+            direction = context.getString(R.string.south);
         } else if (degrees >= 202.5 && degrees < 247.5) {
-            direction = "SW";
+            contentDescription = context.getString(R.string.from_south_west);
+            direction = context.getString(R.string.south_west);
         } else if (degrees >= 247.5 && degrees < 292.5) {
-            direction = "W";
+            contentDescription = context.getString(R.string.from_west);
+            direction = context.getString(R.string.west);
         } else if (degrees >= 292.5 || degrees < 22.5) {
-            direction = "NW";
+            contentDescription = context.getString(R.string.from_north_west);
+            direction = context.getString(R.string.north_west);
         }
-        return String.format(context.getString(windFormat), windSpeed, direction);
-    }
-
-    /**
-     * Returns complete direction names instead of short forms.
-     */
-    public static String getWindDirectionForAccessibility(Context context, float degrees) {
-        String direction = "Unknown";
-        if (degrees >= 337.5 || degrees < 22.5) {
-            direction = context.getString(R.string.from_north);      //"N"
-        } else if (degrees >= 22.5 && degrees < 67.5) {
-            direction = context.getString(R.string.from_north_east); //"NE"
-        } else if (degrees >= 67.5 && degrees < 112.5) {
-            direction = context.getString(R.string.from_east);       //"E"
-        } else if (degrees >= 112.5 && degrees < 157.5) {
-            direction = context.getString(R.string.from_south_east); //"SE"
-        } else if (degrees >= 157.5 && degrees < 202.5) {
-            direction = context.getString(R.string.from_south);      //"S"
-        } else if (degrees >= 202.5 && degrees < 247.5) {
-            direction = context.getString(R.string.from_south_west); //"SW"
-        } else if (degrees >= 247.5 && degrees < 292.5) {
-            direction = context.getString(R.string.from_west);       //"W"
-        } else if (degrees >= 292.5 || degrees < 22.5) {
-            direction = context.getString(R.string.from_north_west); //"NW"
-        }
-        return direction;
+        windDirection.setDisplayText(
+                String.format(context.getString(windFormat), windSpeed, direction));
+        windDirection.setContentDescription(
+                String.format(context.getString(windFormat), windSpeed, contentDescription));
+        return windDirection;
     }
 
     /**
@@ -281,5 +270,29 @@ public class Utility {
             return R.drawable.art_clouds;
         }
         return -1;
+    }
+
+    /**
+     * Holds the wind direction information and respective content description.
+     */
+    public static class WindDirection {
+        private String displayText;
+        private String contentDescription;
+
+        public String getDisplayText() {
+            return displayText;
+        }
+
+        public void setDisplayText(String displayText) {
+            this.displayText = displayText;
+        }
+
+        public String getContentDescription() {
+            return contentDescription;
+        }
+
+        public void setContentDescription(String contentDescription) {
+            this.contentDescription = contentDescription;
+        }
     }
 }

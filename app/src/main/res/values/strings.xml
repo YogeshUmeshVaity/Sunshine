@@ -86,13 +86,23 @@
 
     <!--Complete wind direction names for accessibility text-to-speech -->
     <string name="from_north">From North</string>
-    <string name="from_north_east">From North East</string>
+    <string name="from_north_east">From North-East</string>
     <string name="from_east">From East</string>
     <string name="from_south_east">From South-East</string>
     <string name="from_south">From South</string>
     <string name="from_south_west">From South-West</string>
     <string name="from_west">From West</string>
     <string name="from_north_west">From North-West</string>
+
+    <!--Wind direction short form to display at the end of wind TextView on details screen-->
+    <string name="north">N</string>
+    <string name="north_east">NE</string>
+    <string name="east">E</string>
+    <string name="south_east">SE</string>
+    <string name="south">S</string>
+    <string name="south_west">SW</string>
+    <string name="west">W</string>
+    <string name="north_west">NW</string>
 
 
 </resources>
