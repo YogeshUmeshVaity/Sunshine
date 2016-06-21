@@ -210,9 +210,11 @@ public class DetailFragment extends Fragment
 
         float windSpeed = cursor.getFloat(COL_WEATHER_WIND_SPEED);
         float degrees = cursor.getFloat(COL_WEATHER_DEGREES);
-        windView.setText(Utility.getFormattedWind(getActivity(), windSpeed, degrees));
-        windView.setContentDescription(Utility.getWindDirectionForAccessibility(
-                getActivity(), degrees));
+
+        final Utility.WindDirection formattedWind =
+                Utility.getFormattedWind(getActivity(), windSpeed, degrees);
+        windView.setText(formattedWind.getDisplayText());
+        windView.setContentDescription(formattedWind.getContentDescription());
 
         float pressure = cursor.getFloat(COL_WEATHER_PRESSURE);
         pressureView.setText(getString(R.string.format_pressure, pressure));

@@ -6,7 +6,7 @@
         <item name="colorPrimaryDark">@color/sunshine_dark_blue</item>
     </style>
 
-    <!--To display logo, need to set ForecastTheme to main activity theme attribute in manifest-->
+    <!--To display logo, you need to set ForecastTheme to the main activity theme attribute in manifest-->
     <!-- Main activity theme. -->
     <style name="ForecastTheme" parent="AppTheme">
         <item name="actionBarStyle">@style/ActionBar.Solid.Sunshine.NoTitle</item>
