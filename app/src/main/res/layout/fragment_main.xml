@@ -8,9 +8,10 @@
 
     <ListView
         android:id="@+id/listview_forecast"
+        style="@style/ForecastListItemStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#00000000"
-        style="@style/ForecastListItemStyle"/>
+        android:divider="@null"
+        android:dividerHeight="0dp" />
 
 </FrameLayout>
