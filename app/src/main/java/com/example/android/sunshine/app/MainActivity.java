@@ -109,7 +109,4 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             startActivity(intent);
         }
     }
-
-
-    // TODO: 11/4/16 showLocationOnMap() and onOptionsItemSelected contents to be moved in MainActivity like in course. Perhaps we don't need to do it. Think then decide.
 }
