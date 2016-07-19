@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.android.sunshine.app.data.WeatherContract;
 
 /**
@@ -26,7 +25,7 @@ import com.example.android.sunshine.app.data.WeatherContract;
  */
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    // Since the database always returns the colums in the order we specify in projection,
+    // Since the database always returns the columns in the order we specify in projection,
     // we can rely on the indices in cursor matching the order from our projection.
     // That way avoiding the inefficient getColumnIndex() calls.
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
@@ -119,17 +118,81 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (selectedItemPosition != ListView.INVALID_POSITION) {
+            outState.putInt(CURRENT_LIST_POSTION, selectedItemPosition);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.  For this method
+     * to be called, you must have first called {@link #setHasOptionsMenu}.
+     * @param menu The options menu in which you place your items.
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.forecastfragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            // Get settings for location(postal code)
+            updateWeather();
+            return true;
+        }
+        if (id == R.id.action_show_location) {
+            showLocationMap();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void updateWeather() {
+        // location is the postal code
+        String location = Utility.getPreferredLocation(getActivity());
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getContext());
+        weatherTask.execute(location);
+    }
+
+    /**
+     * Sends an intent to open the location on google maps
+     * TODO:include the code to check if the google maps is installed, otherwise the the app crashes.
+     */
+    private void showLocationMap() {
+        // Get preference value for location(postal code).
+        String postalCode = Utility.getPreferredLocation(getActivity());
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+            .appendQueryParameter("q", postalCode)
+            .build();
+
+        Intent sendLocationToMap = new Intent(Intent.ACTION_VIEW);
+        sendLocationToMap.setData(geoLocation);
+
+        if (sendLocationToMap.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(sendLocationToMap);
+        } else {
+            // Notify user that Google maps is not installed
+            Toast.makeText(getContext(), getString(R.string.google_maps_not_installed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // This is called when a new Loader needs to be created.
         // This fragment only uses one loader, so we don't care about checking the id.
 
         final String locationSetting = Utility.getPreferredLocation(getActivity());
         Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-                locationSetting, System.currentTimeMillis());
+            locationSetting, System.currentTimeMillis());
         String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
 
         return new CursorLoader(
-                getActivity(), weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
+            getActivity(), weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
     }
 
     // This method is called when the Loader completes querying process and the data is ready.
@@ -153,74 +216,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mForecastAdapter.swapCursor(null);
     }
 
-    private void updateWeather() {
-        // location is the postal code
-        String location = Utility.getPreferredLocation(getActivity());
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getContext());
-        weatherTask.execute(location);
-    }
-
-    /**
-     * Initialize the contents of the Activity's standard options menu.  You
-     * should place your menu items in to <var>menu</var>.  For this method
-     * to be called, you must have first called {@link #setHasOptionsMenu}.
-     *
-     * @param menu The options menu in which you place your items.
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.forecastfragment, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            // Get settings for location(postal code)
-            updateWeather();
-            return true;
-        }
-        if(id == R.id.action_show_location) {
-            showLocationMap();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Sends an intent to open the location on google maps
-     * TODO:include the code to check if the google maps is installed, otherwise the the app crashes.
-     */
-    private void showLocationMap() {
-        // Get preference value for location(postal code).
-        String postalCode = Utility.getPreferredLocation(getActivity());
-        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-                .appendQueryParameter("q", postalCode)
-                .build();
-
-        Intent sendLocationToMap = new Intent(Intent.ACTION_VIEW);
-        sendLocationToMap.setData(geoLocation);
-
-        if (sendLocationToMap.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivity(sendLocationToMap);
-        } else {
-            // Notify user that Google maps is not installed
-            Toast.makeText(getContext(), getString(R.string.google_maps_not_installed), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void onLocationChanged() {
         updateWeather();
         getLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if (selectedItemPosition != ListView.INVALID_POSITION) {
-            outState.putInt(CURRENT_LIST_POSTION, selectedItemPosition);
-        }
-        super.onSaveInstanceState(outState);
     }
 
     public void setSpecialTodayLayout(boolean specialTodayLayout) {
