@@ -112,15 +112,28 @@
             android:textSize="22sp"
             tools:text="Pressure: 1014 hPa" />
 
-        <TextView
-            android:id="@+id/wind_text_view"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:fontFamily="sans-serif-condensed"
-            android:textColor="@color/sunshine_headline_black"
-            android:textSize="22sp"
-            tools:text="Wind: 6 km/H NW" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/wind_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@color/sunshine_headline_black"
+                android:textSize="22sp"
+                tools:text="Wind: 6 km/H NW" />
+
+            <com.example.android.sunshine.app.WindArrowView
+                android:id="@+id/wind_arrow"
+                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>
