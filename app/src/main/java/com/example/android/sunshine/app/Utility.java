@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,20 +28,21 @@ public class Utility {
     // Format used for storing dates in the database.  ALso used for converting those strings
     // back into date objects for comparison/processing.
     public static final String DATE_FORMAT = "yyyyMMdd";
+    private static final String TAG = "Utility.java";
 
     public static String getPreferredLocation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_location_key),
-                context.getString(R.string.pref_location_default));
+            context.getString(R.string.pref_location_default));
     }
 
     public static boolean isMetric(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         // Get setting for temperatures units from prefs and then compare to metric value.
         return prefs.getString(
-                context.getString(R.string.pref_temperature_units_key),
-                context.getString(R.string.pref_temperature_units_metric_value))
-                .equals(context.getString(R.string.pref_temperature_units_metric_value));
+            context.getString(R.string.pref_temperature_units_key),
+            context.getString(R.string.pref_temperature_units_metric_value))
+            .equals(context.getString(R.string.pref_temperature_units_metric_value));
     }
 
     static String formatTemperature(Context context, double temperature, boolean isMetric) {
@@ -64,8 +64,7 @@ public class Utility {
     /**
      * Helper method to convert the database representation of the date into something to display
      * to users.  As classy and polished a user experience as "20140102" is, we can do better.
-     *
-     * @param context      Context to use for resource localization
+     * @param context Context to use for resource localization
      * @param dateInMillis The date in milliseconds
      * @return a user-friendly representation of the date.
      */
@@ -85,7 +84,7 @@ public class Utility {
         // withDate is true if this function is called for details fragment.
         // In that case we don't need to proceed further. Just return Day. Because, the date is
         // show separately in details fragment.
-        if(withDate) {
+        if (withDate) {
             return getDayName(context, dateInMillis);
         }
 
@@ -96,9 +95,9 @@ public class Utility {
             int formatId = R.string.format_full_friendly_date;
             // TODO: 20/4/16 format() seems redundant, consider removing before publish.
             return String.format(context.getString(
-                    formatId,
-                    today,
-                    getFormattedMonthDay(context, dateInMillis)));
+                formatId,
+                today,
+                getFormattedMonthDay(context, dateInMillis)));
         } else if (julianDay < currentJulianDay + 7) {
             // If the input date is less than a week in the future, just return the day name.
             return getDayName(context, dateInMillis);
@@ -112,10 +111,8 @@ public class Utility {
     /**
      * Given a day, returns just the name to use for that day.
      * E.g "today", "tomorrow", "wednesday".
-     *
-     * @param context      Context to use for resource localization
+     * @param context Context to use for resource localization
      * @param dateInMillis The date in milliseconds
-     * @return
      */
     public static String getDayName(Context context, long dateInMillis) {
         // If the date is today, return the localized version of "Today" instead of the actual
@@ -140,10 +137,9 @@ public class Utility {
 
     /**
      * Converts db date format to the format "Month day", e.g "June 24".
-     *
-     * @param context      Context to use for resource localization
+     * @param context Context to use for resource localization
      * @param dateInMillis The db formatted date string, expected to be of the form specified
-     *                     in Utility.DATE_FORMAT
+     * in Utility.DATE_FORMAT
      * @return The day in the form of a string formatted "December 6"
      */
     public static String getFormattedMonthDay(Context context, long dateInMillis) {
@@ -196,9 +192,9 @@ public class Utility {
             direction = context.getString(R.string.north_west);
         }
         windDirection.setDisplayText(
-                String.format(context.getString(windFormat), windSpeed, direction));
+            String.format(context.getString(windFormat), windSpeed, direction));
         windDirection.setContentDescription(
-                String.format(context.getString(windFormat), windSpeed, contentDescription));
+            String.format(context.getString(windFormat), windSpeed, contentDescription));
         return windDirection;
     }
 
@@ -270,6 +266,27 @@ public class Utility {
             return R.drawable.art_clouds;
         }
         return -1;
+    }
+
+    public static float roundFigureDegrees(float degrees) {
+        if (degrees >= 337.5 || degrees < 22.5) {
+            return 0;
+        } else if (degrees >= 22.5 && degrees < 67.5) {
+           return 45;
+        } else if (degrees >= 67.5 && degrees < 112.5) {
+            return 90;
+        } else if (degrees >= 112.5 && degrees < 157.5) {
+            return 135;
+        } else if (degrees >= 157.5 && degrees < 202.5) {
+           return 180;
+        } else if (degrees >= 202.5 && degrees < 247.5) {
+            return 225;
+        } else if (degrees >= 247.5 && degrees < 292.5) {
+           return 270;
+        } else if (degrees >= 292.5 || degrees < 22.5) {
+            return 315;
+        }
+        return 0;
     }
 
     /**

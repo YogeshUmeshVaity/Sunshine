@@ -127,8 +127,9 @@
                 tools:text="Wind: 6 km/H NW" />
 
             <com.example.android.sunshine.app.WindArrowView
-                android:id="@+id/wind_arrow"
-                android:layout_margin="8dp"
+                android:id="@+id/wind_arrow_view"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

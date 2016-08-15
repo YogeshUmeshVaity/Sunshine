@@ -12,6 +12,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,6 +63,7 @@ public class DetailFragment extends Fragment
             WeatherContract.WeatherEntry.COLUMN_DEGREES
     };
     private static final int DETAILS_LOADER = 1;
+    private static final String TAG = "DetailFragment.java";
     Uri weatherForDateUri;
     private ShareActionProvider shareActionProvider;
     private String forecastDetails;
@@ -74,6 +76,7 @@ public class DetailFragment extends Fragment
     private TextView pressureView;
     private ImageView forecastImage;
     private TextView descriptionView;
+    private WindArrowView windArrowView;
 
     public DetailFragment() {
         // Without this, system won't call the onCreateOptionsMenu.
@@ -148,7 +151,7 @@ public class DetailFragment extends Fragment
         pressureView = (TextView) rootView.findViewById(R.id.pressure_text_view);
         forecastImage = (ImageView) rootView.findViewById(R.id.forecast_image_view);
         descriptionView = (TextView) rootView.findViewById(R.id.description_text_view);
-
+        windArrowView = (WindArrowView) rootView.findViewById(R.id.wind_arrow_view);
 
         return rootView;
     }
@@ -215,6 +218,9 @@ public class DetailFragment extends Fragment
                 Utility.getFormattedWind(getActivity(), windSpeed, degrees);
         windView.setText(formattedWind.getDisplayText());
         windView.setContentDescription(formattedWind.getContentDescription());
+
+        windArrowView.setAngle(Utility.roundFigureDegrees(degrees));
+        Log.d(TAG, "onLoadFinished: direction : " + formattedWind.getDisplayText());
 
         float pressure = cursor.getFloat(COL_WEATHER_PRESSURE);
         pressureView.setText(getString(R.string.format_pressure, pressure));
