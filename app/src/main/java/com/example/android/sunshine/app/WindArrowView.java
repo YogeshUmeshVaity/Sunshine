@@ -9,8 +9,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 
 /**
  * Arrow that shows wind direction.
@@ -18,10 +19,22 @@ import android.view.View;
  */
 public class WindArrowView extends View {
 
+    private static final String TAG = "WindArrowView.java";
     private Paint arrowPaint;
     private Bitmap arrowBitmap;
     private Matrix rotationMatrix;
     private float angle = 45;
+    private String windDirection;
+
+    // Directions in Degrees
+    private  final float NORTH = 0.0f;
+    private  final float NORTH_EAST = 45.0f;
+    private  final float EAST = 90.0f;
+    private  final float SOUTH_EAST = 135.0f;
+    private  final float SOUTH = 180.0f;
+    private  final float SOUTH_WEST = 225.0f;
+    private  final float WEST = 270.0f;
+    private  final float NORTH_WEST = 315.0f;
 
     /**
      * See {@link View class documentation for details.}
@@ -73,7 +86,6 @@ public class WindArrowView extends View {
         setMeasuredDimension(
             resolveSize(minimumWidth, widthMeasureSpec),
             resolveSize(minimumHeight, heightMeasureSpec));
-        Log.d("WindArrowView.java", "onMeasure() called");
     }
 
     public static int manageSize(int childSize, int measureSpec) {
@@ -86,7 +98,7 @@ public class WindArrowView extends View {
 
             case MeasureSpec.AT_MOST:
                 // Return the smallest of childSize and specSize
-                return (specSize < childSize)? specSize : childSize;
+                return (specSize < childSize) ? specSize : childSize;
 
             case MeasureSpec.EXACTLY:
                 // Should honor parent-View's request for the given size.
@@ -97,7 +109,6 @@ public class WindArrowView extends View {
 
         return childSize;
     }
-
 
     private void createArrowBitmap() {
         // Holds entire arrow drawn on canvas
@@ -141,12 +152,75 @@ public class WindArrowView extends View {
     }
 
     /**
-     * Specifies the angle for arrow position.
+     * Specifies the angle for arrow position. Round figures the angle for closest direction,
+     * for example, if the angle specified is 85, it rounded to 90 for East direction.
      * @param angle to be set for arrow position in degrees. For example 0 - 360.
      */
     public void setAngle(final float angle) {
-        this.angle = angle;
-        rotationMatrix.setRotate(angle, 11, 11);
+        this.angle = roundFigureDegrees(angle);
+        rotationMatrix.setRotate(this.angle, 11, 11);
         invalidate();
+        sendAccessibilityEvent();
     }
+
+    private void sendAccessibilityEvent() {
+        AccessibilityManager manager = (AccessibilityManager) getContext()
+            .getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (manager.isEnabled()) {
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+        }
+    }
+
+    @Override
+    public boolean dispatchPopulateAccessibilityEvent(final AccessibilityEvent event) {
+        super.dispatchPopulateAccessibilityEvent(event);
+        event.getText().add(convertDegreesToStringDirection(angle));
+        return true;
+    }
+
+    private String convertDegreesToStringDirection(float directionDegrees) {
+        if(directionDegrees == NORTH) {
+            return getContext().getString(R.string.north);
+        } else if (directionDegrees == NORTH_EAST) {
+            return getContext().getString(R.string.north_east);
+        } else if (directionDegrees == EAST) {
+            return getContext().getString(R.string.east);
+        } else if (directionDegrees == SOUTH_EAST) {
+            return getContext().getString(R.string.south_east);
+        } else if (directionDegrees == SOUTH) {
+            return getContext().getString(R.string.south);
+        } else if (directionDegrees == SOUTH_WEST) {
+            return getContext().getString(R.string.south_west);
+        } else if (directionDegrees == WEST) {
+            return getContext().getString(R.string.west);
+        } else if (directionDegrees == NORTH_WEST) {
+            return getContext().getString(R.string.north_west);
+        } else throw new RuntimeException("Invalid direction in degrees");
+    }
+
+    /**
+     * Round figures the angle for closest direction, for example, if the angle specified
+     * is 85, it rounded to 90 for East direction.
+     */
+    private float roundFigureDegrees(float degrees) {
+        if (degrees >= 337.5 || degrees < 22.5) {
+            return NORTH;
+        } else if (degrees >= 22.5 && degrees < 67.5) {
+            return NORTH_EAST;
+        } else if (degrees >= 67.5 && degrees < 112.5) {
+            return EAST;
+        } else if (degrees >= 112.5 && degrees < 157.5) {
+            return SOUTH_EAST;
+        } else if (degrees >= 157.5 && degrees < 202.5) {
+            return SOUTH;
+        } else if (degrees >= 202.5 && degrees < 247.5) {
+            return SOUTH_WEST;
+        } else if (degrees >= 247.5 && degrees < 292.5) {
+            return WEST;
+        } else if (degrees >= 292.5 || degrees < 22.5) {
+            return NORTH_WEST;
+        }
+        return 0;
+    }
+
 }

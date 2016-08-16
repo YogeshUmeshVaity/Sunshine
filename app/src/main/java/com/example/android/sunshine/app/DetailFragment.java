@@ -12,7 +12,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.android.sunshine.app.data.WeatherContract;
 
 /**
@@ -219,8 +217,7 @@ public class DetailFragment extends Fragment
         windView.setText(formattedWind.getDisplayText());
         windView.setContentDescription(formattedWind.getContentDescription());
 
-        windArrowView.setAngle(Utility.roundFigureDegrees(degrees));
-        Log.d(TAG, "onLoadFinished: direction : " + formattedWind.getDisplayText());
+        if (windArrowView != null) windArrowView.setAngle(degrees);
 
         float pressure = cursor.getFloat(COL_WEATHER_PRESSURE);
         pressureView.setText(getString(R.string.format_pressure, pressure));

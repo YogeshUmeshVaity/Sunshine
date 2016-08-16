@@ -103,6 +103,7 @@
     <string name="south_west">SW</string>
     <string name="west">W</string>
     <string name="north_west">NW</string>
+    <string name="arrow_pointing">Arrow pointing in the direction</string>
 
 
 </resources>

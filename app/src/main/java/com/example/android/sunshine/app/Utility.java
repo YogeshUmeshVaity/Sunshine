@@ -268,27 +268,6 @@ public class Utility {
         return -1;
     }
 
-    public static float roundFigureDegrees(float degrees) {
-        if (degrees >= 337.5 || degrees < 22.5) {
-            return 0;
-        } else if (degrees >= 22.5 && degrees < 67.5) {
-           return 45;
-        } else if (degrees >= 67.5 && degrees < 112.5) {
-            return 90;
-        } else if (degrees >= 112.5 && degrees < 157.5) {
-            return 135;
-        } else if (degrees >= 157.5 && degrees < 202.5) {
-           return 180;
-        } else if (degrees >= 202.5 && degrees < 247.5) {
-            return 225;
-        } else if (degrees >= 247.5 && degrees < 292.5) {
-           return 270;
-        } else if (degrees >= 292.5 || degrees < 22.5) {
-            return 315;
-        }
-        return 0;
-    }
-
     /**
      * Holds the wind direction information and respective content description.
      */
