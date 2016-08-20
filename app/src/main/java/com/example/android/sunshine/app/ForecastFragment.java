@@ -19,12 +19,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.example.android.sunshine.app.data.WeatherContract;
+import com.example.android.sunshine.app.service.SunshineService;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    public static final String LOCATION_TO_FETCH = "locationToFetch";
     // Since the database always returns the columns in the order we specify in projection,
     // we can rely on the indices in cursor matching the order from our projection.
     // That way avoiding the inefficient getColumnIndex() calls.
@@ -155,8 +157,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateWeather() {
         // location is the postal code
         String location = Utility.getPreferredLocation(getActivity());
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getContext());
-        weatherTask.execute(location);
+        launchFetchWeatherService(location);
+    }
+
+    private void launchFetchWeatherService(final String location) {
+        Intent fetchWeatherIntent = new Intent(getContext(), SunshineService.class);
+        fetchWeatherIntent.putExtra(LOCATION_TO_FETCH, location);
+        getContext().startService(fetchWeatherIntent);
     }
 
     /**
