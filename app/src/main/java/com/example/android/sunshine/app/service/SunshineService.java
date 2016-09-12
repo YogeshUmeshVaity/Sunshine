@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app.service;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,7 +13,7 @@ import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
 import com.example.android.sunshine.app.BuildConfig;
-import com.example.android.sunshine.app.ForecastFragment;
+import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,7 +39,7 @@ public class SunshineService extends IntentService {
         Bundle extras = intent.getExtras();
         // If there's no zip code, there's nothing to look up.  Verify size of params.
         if (extras != null) {
-            locationQuery = extras.getString(ForecastFragment.LOCATION_TO_FETCH);
+            locationQuery = extras.getString(SunshineService.AlarmReceiver.LOCATION_TO_FETCH);
         } else {
             return;
         }
@@ -317,5 +319,20 @@ public class SunshineService extends IntentService {
             cursor.close();
         }
         return locationId;
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+        public static final String LOCATION_TO_FETCH = "locationToFetch";
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            launchFetchWeatherService(context);
+        }
+
+        private void launchFetchWeatherService(Context context) {
+            Intent fetchWeatherIntent = new Intent(context, SunshineService.class);
+            fetchWeatherIntent.putExtra(LOCATION_TO_FETCH, Utility.getPreferredLocation(context));
+            context.startService(fetchWeatherIntent);
+        }
     }
 }

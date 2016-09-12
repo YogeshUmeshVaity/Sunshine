@@ -1,9 +1,13 @@
 package com.example.android.sunshine.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -25,8 +29,6 @@ import com.example.android.sunshine.app.service.SunshineService;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    public static final String LOCATION_TO_FETCH = "locationToFetch";
     // Since the database always returns the columns in the order we specify in projection,
     // we can rely on the indices in cursor matching the order from our projection.
     // That way avoiding the inefficient getColumnIndex() calls.
@@ -41,6 +43,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_CONDITION_ID = 6;
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
+    // TODO: 9/3/16 Rectify the spelling of this variable name.
     private static final String CURRENT_LIST_POSTION = "selectedItemPosition";
     private static final String LOG_TAG = "ForecastFragment";
     private static final int FORECAST_LOADER_ID = 0;
@@ -155,15 +158,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
-        // location is the postal code
-        String location = Utility.getPreferredLocation(getActivity());
-        launchFetchWeatherService(location);
-    }
+        Intent intent = new Intent(getContext(), SunshineService.AlarmReceiver.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getActivity(), 0, intent,
+            PendingIntent.FLAG_ONE_SHOT);
 
-    private void launchFetchWeatherService(final String location) {
-        Intent fetchWeatherIntent = new Intent(getContext(), SunshineService.class);
-        fetchWeatherIntent.putExtra(LOCATION_TO_FETCH, location);
-        getContext().startService(fetchWeatherIntent);
+        AlarmManager alarmManager = (AlarmManager) getContext()
+            .getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + 5 * 1000, alarmIntent);
     }
 
     /**
