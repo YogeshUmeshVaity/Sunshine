@@ -170,7 +170,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     /**
      * Sends an intent to open the location on google maps
-     * TODO:include the code to check if the google maps is installed, otherwise the the app crashes.
+     * Checks if the google maps is installed, otherwise the the app crashes.
      */
     private void showLocationMap() {
         // Get preference value for location(postal code).
