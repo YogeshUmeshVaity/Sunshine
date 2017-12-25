@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.service.SunshineService;
+import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -158,14 +159,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
-        Intent intent = new Intent(getContext(), SunshineService.AlarmReceiver.class);
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getActivity(), 0, intent,
-            PendingIntent.FLAG_ONE_SHOT);
-
-        AlarmManager alarmManager = (AlarmManager) getContext()
-            .getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 5 * 1000, alarmIntent);
+        SunshineSyncAdapter.syncImmediately(getActivity());
+        //Intent intent = new Intent(getContext(), SunshineService.AlarmReceiver.class);
+        //PendingIntent alarmIntent = PendingIntent.getBroadcast(getActivity(), 0, intent,
+        //    PendingIntent.FLAG_ONE_SHOT);
+        //
+        //AlarmManager alarmManager = (AlarmManager) getContext()
+        //    .getSystemService(Context.ALARM_SERVICE);
+        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+        //    SystemClock.elapsedRealtime() + 5 * 1000, alarmIntent);
     }
 
     /**
