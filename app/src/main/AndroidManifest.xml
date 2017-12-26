@@ -55,8 +55,6 @@
                 android:value="com.example.android.sunshine.app.MainActivity" />
         </activity>
 
-        <service android:name=".service.SunshineService"/>
-
         <!-- SyncAdapter's dummy authentication service -->
         <service
             android:name=".sync.SunshineAuthenticatorService"
@@ -81,10 +79,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-
-        <receiver
-            android:name=".service.SunshineService$AlarmReceiver"
-            android:enabled="true"/>
 
     </application>
 
