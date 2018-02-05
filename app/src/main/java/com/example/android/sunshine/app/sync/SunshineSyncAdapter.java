@@ -2,12 +2,15 @@ package com.example.android.sunshine.app.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
@@ -16,10 +19,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.format.Time;
 import android.util.Log;
 
 import com.example.android.sunshine.app.BuildConfig;
+import com.example.android.sunshine.app.MainActivity;
 import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
@@ -463,15 +469,31 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 String title = context.getString(R.string.app_name);
 
                 // Define the text of the forecast.
-                boolean isMetric = Utility.isMetric(context)
+                boolean isMetric = Utility.isMetric(context);
                 String contentText = String.format(context.getString(R.string.format_notification),
                     desc,
                     Utility.formatTemperature(context, high, isMetric),
                     Utility.formatTemperature(context, low, isMetric));
 
                 //build your notification here.
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(iconId)
+                    .setContentTitle(title)
+                    .setContentText(contentText);
 
+                Intent weatherIntent = new Intent(context, MainActivity.class);
 
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                stackBuilder.addParentStack(MainActivity.class);
+                stackBuilder.addNextIntent(weatherIntent);
+                PendingIntent weatherPendingIntent =
+                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(weatherPendingIntent);
+
+                NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                notificationManager.notify(WEATHER_NOTIFICATION_ID, builder.build());
                 //refreshing last sync
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putLong(lastNotificationKey, System.currentTimeMillis());
