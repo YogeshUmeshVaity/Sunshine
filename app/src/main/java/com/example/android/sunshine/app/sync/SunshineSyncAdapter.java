@@ -35,6 +35,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Vector;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -385,6 +386,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         cVVector.toArray(fourteenDaysWeather);
         inserted = contentResolver.bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI,
             fourteenDaysWeather);
+
+        // Delete data that is more than one day old, so we don't build up and endless history.
+        getContext().getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
+            WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
+            new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1))});
       }
       Log.d(LOG_TAG, "Fetch Weather Task Complete. " + inserted + " Inserted");
       notifyWeather();
